@@ -8,7 +8,7 @@ const router = express.Router();
 // router.post('/register', validate(authValidation.register), authController.register);
 router.post(
   "/register",
-  validate(authValidation.register),
+  // validate(authValidation.register),
   authController.register
 );
 router.post(
