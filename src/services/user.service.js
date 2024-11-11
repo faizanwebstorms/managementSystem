@@ -253,6 +253,20 @@ const getADealer = async (id) => {
     throw e;
   }
 };
+
+/**
+ * Get a dealer
+ * @returns {Promise<User>}
+ */
+const deleteADealer = async (dealer) => {
+  try {
+    await User.deleteOne({_id: dealer?.userId});
+    await Dealer.deleteOne({_id: dealer?._id});
+    return true;
+  } catch (e) {
+    throw e;
+  }
+};
 module.exports = {
   findByClause,
   findById,
@@ -265,4 +279,5 @@ module.exports = {
   addDealer,
   getAllDealers,
   getADealer,
+  deleteADealer
 };

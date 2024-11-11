@@ -12,6 +12,7 @@ router
 router.post("/dealer/add", auth(), role("ADMIN"), userController.addDealer);
 router.get("/dealers/all", auth(), role("ADMIN"), userController.getAllDealers);
 router.get("/dealer/:id", auth(), role("ADMIN"), userController.getADealer);
+router.delete("/dealer/:id", auth(), role("ADMIN"), userController.deleteADealer);
 router
   .route("/:userId")
   .patch(
@@ -140,7 +141,32 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
+/**
+ * @swagger
+ * /users/dealer/{id}:
+ *   delete:
+ *     summary: Delete A Dealer
+ *     description: Delete A Dealer
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Enter dealer id to delete dealer
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
 /**
  * @swagger
  * /users/{id}:

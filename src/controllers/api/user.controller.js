@@ -6,7 +6,7 @@ const userService = require("../../services/user.service");
 // const otpService = require('../../services/otp.service');
 const Helper = require("../../utils/Helper");
 const messages = require("../../config/messages");
-const { User } = require("../../models");
+const { User, Dealer } = require("../../models");
 
 /**
  * Update user personal Information
@@ -53,13 +53,26 @@ const getAllDealers = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const getADealer = catchAsync(async (req, res) => {
-  console.log("req.params", req.params);
   const dealer = await userService.getADealer(req.params?.id);
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, dealer));
+});
+
+/**
+ * Delete a dealer
+ * @type {(function(*, *, *): void)|*}
+ */
+const deleteADealer = catchAsync(async (req, res) => {
+  const dealer = await Dealer.findById(req.params.id).select('_id userId');
+  if(!dealer){
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.dealer.notFound);
+  }
+  const deleteDealer = await userService.deleteADealer(dealer);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, deleteDealer));
 });
 module.exports = {
   updateUser,
   addDealer,
   getAllDealers,
   getADealer,
+  deleteADealer
 };
