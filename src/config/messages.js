@@ -22,7 +22,7 @@ module.exports = {
     forbidden: "User does not have the required permission",
     emailNotFound: "Email Not Found",
   },
-  preference: {
-    notFound: "Preference Not Found",
+  dealer: {
+    notFound: "Dealer Not Found",
   },
 };

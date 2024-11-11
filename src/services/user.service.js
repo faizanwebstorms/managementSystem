@@ -1,6 +1,8 @@
 const httpStatus = require("http-status");
-const { User } = require("../models");
+const { User, Dealer } = require("../models");
 const ApiError = require("../utils/ApiError");
+const { roles } = require("../config/user");
+const mongoose = require("mongoose");
 /**
  * filter User Data from request
  * @param data
@@ -15,6 +17,21 @@ const _filterUserData = (data) => {
     password: data?.password,
     username: data?.username,
     role: data?.role,
+  };
+};
+
+/**
+ * filter Dealer Data from request
+ * @param data
+ * @returns {*}
+ * @private
+ */
+const _filterDealerData = (data, userId) => {
+  return {
+    userId,
+    payment_range_min: data?.paymentRangeMin,
+    payment_range_max: data?.paymentRangeMax,
+    classification: data?.classification,
   };
 };
 
@@ -90,8 +107,6 @@ const findByClause = async (filters, multiple = false) => {
 const createUser = async (userBody) => {
   try {
     await validateEmailandUsername(userBody);
-
-    // const vectors = convertToVector(user_preferences);
 
     const item = await User.create(_filterUserData(userBody));
     if (!item) {
@@ -170,6 +185,61 @@ const update = async (user, updateBody) => {
   }
 };
 
+/**
+ * Add a delaer
+ * @param {ObjectId} userId
+ * @param {Object} body
+ * @returns {Promise<User>}
+ */
+const addDealer = async (body) => {
+  try {
+    body.role = roles.DEALER;
+    const user = await createUser(body);
+
+    if (!user) {
+      throw new Error("Unable to create user");
+    }
+
+    const dealer = await Dealer.create(_filterDealerData(body, user?._id));
+
+    return { user, dealer };
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * Get all dealers
+ * @returns {Promise<User>}
+ */
+const getAllDealers = async (filter , options) => {
+  try {
+    const dealers = await Dealer.paginate(filter, {
+      ...options,
+
+    });
+    return dealers;
+  } catch (e) {
+    throw e;
+  }
+};
+
+
+/**
+ * Get a dealer
+ * @returns {Promise<User>}
+ */
+const getADealer = async (id) => {
+  try {
+    const dealer = await Dealer.findOne({ _id: id }).populate(
+      "userId",
+      "_id name email firstName isEmailVerified"
+    );
+    return dealer;
+  } catch (e) {
+    throw e;
+  }
+};
 module.exports = {
   findByClause,
   findById,
@@ -179,4 +249,7 @@ module.exports = {
   checkEmailValidity,
   validateEmailandUsername,
   update,
+  addDealer,
+  getAllDealers,
+  getADealer,
 };
