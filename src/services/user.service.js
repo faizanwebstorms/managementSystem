@@ -209,20 +209,33 @@ const addDealer = async (body) => {
 };
 
 /**
- * Get all dealers
- * @returns {Promise<User>}
+ * Get all dealers with user information using aggregate and aggregatePaginate
+ * @returns {Promise<Object>}
  */
-const getAllDealers = async (filter , options) => {
+const getAllDealers = async (filter, options) => {
   try {
-    const dealers = await Dealer.paginate(filter, {
-      ...options,
+    const pipeline = [
+      { $match: filter }, // Apply any filters
+      {
+        $lookup: {
+          from: 'users',          // Collection to join (use lowercase if your model name is "User")
+          localField: 'userId',   // Field in Dealer collection
+          foreignField: '_id',    // Field in User collection to match
+          as: 'user',             // Name of the array field in the result
+        }
+      },
+      { $unwind: '$user' }, // Unwind to flatten the user data if you expect only one user per dealer
+    ];
 
-    });
+    // Apply pagination options
+    const dealers = await Dealer.aggregatePaginate(Dealer.aggregate(pipeline), options);
+
     return dealers;
   } catch (e) {
     throw e;
   }
 };
+
 
 
 /**
