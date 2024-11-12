@@ -38,12 +38,35 @@ const addDealer = catchAsync(async (req, res) => {
  */
 const getAllDealers = catchAsync(async (req, res) => {
   const options = pick(req.query, ['limit', 'page']);
-  const filter = {}
   if (req.query.sortBy) {
     options.sort = {};
     // eslint-disable-next-line prefer-destructuring
     options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
   }
+  let filter = {};
+  if (req.query.searchTerm) {
+    const term = req.query.searchTerm.trim();
+    console.log('searchTerm:', term);
+  
+    // Try to parse the term as a number for the dealer fields
+    const termAsNumber = parseFloat(term);
+  
+    filter = {
+      $or: [
+        { 'user.firstName': { $regex: term, $options: 'i' } },
+        { 'user.lastName': { $regex: term, $options: 'i' } },
+        { 'user.username': { $regex: term, $options: 'i' } },
+        ...(isNaN(termAsNumber)
+          ? [] // If the term is not a number, don't include numeric fields
+          : [
+              { payment_range_min: termAsNumber },
+              { payment_range_max: termAsNumber },
+            ]
+        )
+      ],
+    };
+  }
+  
   const dealers = await userService.getAllDealers(filter , options);
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, dealers));
 });

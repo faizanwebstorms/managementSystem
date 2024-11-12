@@ -47,7 +47,7 @@ module.exports = router;
  *               - email
  *               - password
  *             properties:
- *               firsName:
+ *               firstName:
  *                 type: string
  *               email:
  *                 type: string
@@ -63,7 +63,7 @@ module.exports = router;
  *               paymentRangeMax:
  *                  type: integer
  *             example:
- *               firsName: Faizan Ibrahim
+ *               firstName: Faizan Ibrahim
  *               email: fake@example.com
  *               password: Password1@
  *               paymentRangeMin: 0
@@ -86,6 +86,11 @@ module.exports = router;
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: query
+ *         name: searchTerm
+ *         schema:
+ *           type: string
+ *         description: Seach by email , firstName , lastName etc
  *       - in: query
  *         name: sortBy
  *         schema:

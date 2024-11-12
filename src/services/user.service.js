@@ -107,7 +107,6 @@ const findByClause = async (filters, multiple = false) => {
 const createUser = async (userBody) => {
   try {
     await validateEmailandUsername(userBody);
-
     const item = await User.create(_filterUserData(userBody));
     if (!item) {
       throw new Error();
@@ -214,17 +213,17 @@ const addDealer = async (body) => {
  */
 const getAllDealers = async (filter, options) => {
   try {
+    // Build the aggregation pipeline
     const pipeline = [
-      { $match: filter }, // Apply any filters
-      {
-        $lookup: {
-          from: 'users',          // Collection to join (use lowercase if your model name is "User")
-          localField: 'userId',   // Field in Dealer collection
-          foreignField: '_id',    // Field in User collection to match
-          as: 'user',             // Name of the array field in the result
+      { $lookup: {
+          from: 'users',        
+          localField: 'userId',  
+          foreignField: '_id',  
+          as: 'user',            
         }
       },
-      { $unwind: '$user' }, // Unwind to flatten the user data if you expect only one user per dealer
+      { $unwind: '$user' },      // Unwind to flatten the user data if only one user per dealer
+      { $match: filter }         
     ];
 
     // Apply pagination options
