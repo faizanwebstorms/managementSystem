@@ -2,4 +2,6 @@ const { model } = require("mongoose");
 module.exports.Token = require("./token.model");
 module.exports.User = require("./user.model");
 module.exports.Dealer = require("./dealers.model");
+module.exports.Institution = require("./institution.model");
+module.exports.Personal = require("./personal.model");
 module.exports.OTP = require("./otp");

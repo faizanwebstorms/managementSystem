@@ -1,8 +1,9 @@
 const httpStatus = require("http-status");
-const { User, Dealer } = require("../models");
+const { User, Dealer, Institution, Personal } = require("../models");
 const ApiError = require("../utils/ApiError");
 const { roles } = require("../config/user");
 const mongoose = require("mongoose");
+const { log } = require("winston");
 /**
  * filter User Data from request
  * @param data
@@ -32,6 +33,19 @@ const _filterDealerData = (data, userId) => {
     payment_range_min: data?.paymentRangeMin,
     payment_range_max: data?.paymentRangeMax,
     classification: data?.classification,
+  };
+};
+
+/**
+ * filter Institution Data from request
+ * @param data
+ * @returns {*}
+ * @private
+ */
+const _filterAccountData = (data, userId) => {
+  return {
+    userId,
+    name: data?.name,
   };
 };
 
@@ -235,8 +249,6 @@ const getAllDealers = async (filter, options) => {
   }
 };
 
-
-
 /**
  * Get a dealer
  * @returns {Promise<User>}
@@ -266,6 +278,114 @@ const deleteADealer = async (dealer) => {
     throw e;
   }
 };
+
+/**
+ * Add an Personal or Institution Account
+ * @param {ObjectId} userId
+ * @param {Object} body
+ * @returns {Promise<User>}
+ */
+const addAccount = async (body) => {
+  try {
+    const user = await createUser(body);
+
+    if (!user) {
+      throw new Error("Unable to create user");
+    }
+    let account;
+    if(user?.role === roles.INSTITUTION){
+      account = await Institution.create(_filterAccountData(body, user?._id));
+    }
+    else if(user?.role === roles.PERSONAL){
+       account = await Personal.create(_filterAccountData(body, user?._id));
+    }
+    
+    return { user, account };
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * Get all Personal or Institution Accounts with user information using aggregate and aggregatePaginate
+ * @returns {Promise<Object>}
+ */
+const getAllAccounts = async (filter, options , model) => {
+  try {
+    // Build the aggregation pipeline
+    const pipeline = [
+      { $lookup: {
+          from: 'users',        
+          localField: 'userId',  
+          foreignField: '_id',  
+          as: 'user',            
+        }
+      },
+      { $unwind: '$user' },      // Unwind to flatten the user data if only one user per dealer
+      { $match: filter }         
+    ];
+    let accounts;
+    if (model == 1){
+     accounts = await Institution.aggregatePaginate(Institution.aggregate(pipeline), options);
+    }else if (model == 2){
+      accounts = await Personal.aggregatePaginate(Personal.aggregate(pipeline), options);
+    }
+
+    return accounts;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * Get a Personal or Institution
+ * @returns {Promise<User>}
+ */
+const getAAccount = async (id , model) => {
+  try {
+    let account ;
+    if (model == 1){
+       account = await Institution.findOne({ _id: id }).populate(
+        "userId",
+        "_id  email role isEmailVerified"
+      );
+     }
+     else if (model == 2){
+       account = await Personal.findOne({ _id: id }).populate(
+        "userId",
+        "_id email role isEmailVerified"
+      );
+     }
+   
+   
+    return account;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * Delete a Personal or Institution
+ * @returns {Promise<User>}
+ */
+const deleteAAccount = async (account , model) => {
+  try {
+    await User.deleteOne({_id: account?.userId});
+    
+
+    if (model == 1){
+      console.log('model', model);
+      await Institution.deleteOne({_id: account?._id});
+    }
+    else if (model == 2){
+      await Personal.deleteOne({_id: account?._id});
+    }
+    return true;
+  } catch (e) {
+    throw e;
+  }
+};
+
 module.exports = {
   findByClause,
   findById,
@@ -278,5 +398,10 @@ module.exports = {
   addDealer,
   getAllDealers,
   getADealer,
-  deleteADealer
+  deleteADealer,
+  addAccount,
+  deleteAAccount,
+  getAllAccounts,
+  getAAccount,
+  
 };

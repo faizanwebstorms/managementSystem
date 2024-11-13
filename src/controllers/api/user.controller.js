@@ -6,7 +6,8 @@ const userService = require("../../services/user.service");
 // const otpService = require('../../services/otp.service');
 const Helper = require("../../utils/Helper");
 const messages = require("../../config/messages");
-const { User, Dealer } = require("../../models");
+const { User, Dealer, Institution, Personal } = require("../../models");
+const { log } = require("winston");
 
 /**
  * Update user personal Information
@@ -92,10 +93,75 @@ const deleteADealer = catchAsync(async (req, res) => {
   const deleteDealer = await userService.deleteADealer(dealer);
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, deleteDealer));
 });
+
+/**
+ * Add a  Personal or Institution Account
+ * @type {(function(*, *, *): void)|*}
+ */
+const addAccount = catchAsync(async (req, res) => {
+  const account = await userService.addAccount(req.body);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
+});
+
+/**
+ * Get all Personal or Institution Accounts
+ * @type {(function(*, *, *): void)|*}
+ */
+const getAllAccounts = catchAsync(async (req, res) => {
+  const options = pick(req.query, ['limit', 'page']);
+  if (req.query.sortBy) {
+    options.sort = {};
+    // eslint-disable-next-line prefer-destructuring
+    options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
+  }
+  let filter = {};
+  if (req.query.searchTerm) {
+    const term = req.query.searchTerm.trim();
+
+    filter = {
+      $or: [
+        { 'name': { $regex: term, $options: 'i' } },
+        { 'user.email': { $regex: term, $options: 'i' } },
+      ],
+    };
+  }
+  
+  const account = await userService.getAllAccounts(filter , options , req.query.model);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
+});
+
+/**
+ * Get a  Personal or Institution
+ * @type {(function(*, *, *): void)|*}
+ */
+const getAAccount = catchAsync(async (req, res) => {
+  const account = await userService.getAAccount(req.params?.id , req.query.model);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
+});
+
+/**
+ * Delete a Personal or Institution
+ * @type {(function(*, *, *): void)|*}
+ */
+const deleteAAccount = catchAsync(async (req, res) => {
+  let account;
+  if (req.query.model == 1)   account = await Institution.findById(req.params.id).select('_id userId');
+  else if (req.query.model == 2) account = await Personal.findById(req.params.id).select('_id userId');
+  
+  if(!account){
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
+  }
+  const deleteAccount = await userService.deleteAAccount(account , req.query.model);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, deleteAccount));
+});
 module.exports = {
   updateUser,
   addDealer,
   getAllDealers,
   getADealer,
-  deleteADealer
+  deleteADealer,
+  addAccount,
+  getAAccount,
+  getAllAccounts,
+  deleteAAccount
 };
