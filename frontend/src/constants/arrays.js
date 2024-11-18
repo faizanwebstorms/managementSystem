@@ -1,0 +1,23 @@
+export const sampleDealers = [
+  { id: 1, name: "Dealer 1", email: "dealer1@gmail.com", limit: 50 },
+  { id: 2, name: "Dealer 2", email: "dealer2@gmail.com", limit: 50 },
+  { id: 3, name: "Dealer 3", email: "dealer3@gmail.com", limit: 50 },
+  { id: 4, name: "Dealer 4", email: "dealer4@gmail.com", limit: 50 },
+  { id: 5, name: "Dealer 5", email: "dealer5@gmail.com", limit: 50 },
+  { id: 6, name: "Dealer 6", email: "dealer6@gmail.com", limit: 50 },
+  { id: 7, name: "Dealer 7", email: "dealer7@gmail.com", limit: 50 },
+  { id: 8, name: "Dealer 8", email: "dealer8@gmail.com", limit: 50 },
+  { id: 9, name: "Dealer 9", email: "dealer9@gmail.com", limit: 50 },
+  { id: 10, name: "Dealer 10", email: "dealer10@gmail.com", limit: 50 },
+  { id: 11, name: "Dealer 11", email: "dealer11@gmail.com", limit: 50 },
+  { id: 12, name: "Dealer 12", email: "dealer12@gmail.com", limit: 50 },
+  { id: 13, name: "Dealer 13", email: "dealer13@gmail.com", limit: 50 },
+  { id: 14, name: "Dealer 14", email: "dealer14@gmail.com", limit: 50 },
+  { id: 15, name: "Dealer 15", email: "dealer15@gmail.com", limit: 50 },
+  { id: 16, name: "Dealer 16", email: "dealer16@gmail.com", limit: 50 },
+  { id: 17, name: "Dealer 17", email: "dealer17@gmail.com", limit: 50 },
+  { id: 18, name: "Dealer 18", email: "dealer18@gmail.com", limit: 50 },
+  { id: 19, name: "Dealer 19", email: "dealer19@gmail.com", limit: 50 },
+  { id: 20, name: "Dealer 20", email: "dealer20@gmail.com", limit: 50 },
+  // Add more dealers manually if needed, up to 50 or more.
+];
