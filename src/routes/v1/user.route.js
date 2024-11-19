@@ -215,7 +215,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Enter personal or institution id to get personal or institution
+ *         description: Enter dealer id to get dealer
  *     requestBody:
  *       required: true
  *       content:
