@@ -33,7 +33,7 @@ const _filterDealerData = (data, userId) => {
     payment_range_min: data?.paymentRangeMin,
     payment_range_max: data?.paymentRangeMax,
     classification: data?.classification,
-    name: body?.firstName,
+    name: data?.name,
   };
 };
 
