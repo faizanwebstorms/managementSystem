@@ -33,6 +33,7 @@ const _filterDealerData = (data, userId) => {
     payment_range_min: data?.paymentRangeMin,
     payment_range_max: data?.paymentRangeMax,
     classification: data?.classification,
+    name: body?.firstName,
   };
 };
 
@@ -284,6 +285,20 @@ const deleteADealer = async (dealer) => {
 };
 
 /**
+ * Update a Dealer
+ * @returns {Promise<User>}
+ */
+const updateADealer = async (dealer, updateBody) => {
+  try {
+    Object.assign(dealer, updateBody);
+    await dealer.save();
+    return dealer;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
  * Add an Personal or Institution Account
  * @param {ObjectId} userId
  * @param {Object} body
@@ -391,6 +406,20 @@ const deleteAAccount = async (account, model) => {
   }
 };
 
+/**
+ * Update a Personal or Institution
+ * @returns {Promise<User>}
+ */
+const updateAAccount = async (account, model, updateBody) => {
+  try {
+    Object.assign(account, updateBody);
+    await account.save();
+    return account;
+  } catch (e) {
+    throw e;
+  }
+};
+
 module.exports = {
   findByClause,
   findById,
@@ -408,4 +437,6 @@ module.exports = {
   deleteAAccount,
   getAllAccounts,
   getAAccount,
+  updateAAccount,
+  updateADealer,
 };

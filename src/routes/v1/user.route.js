@@ -7,27 +7,47 @@ const role = require("../../middlewares/role");
 
 const router = express.Router();
 
-// DEALER CRUD AND MANAGEMENT 
+// DEALER CRUD AND MANAGEMENT
 router
   .route("/dealer/add")
   .post(auth(), role("ADMIN"), userController.addDealer);
 router.post("/dealer/add", auth(), role("ADMIN"), userController.addDealer);
 router.get("/dealers/all", auth(), role("ADMIN"), userController.getAllDealers);
 router.get("/dealer/:id", auth(), role("ADMIN"), userController.getADealer);
-router.delete("/dealer/:id", auth(), role("ADMIN"), userController.deleteADealer);
+router.delete(
+  "/dealer/:id",
+  auth(),
+  role("ADMIN"),
+  userController.deleteADealer
+);
+router.patch(
+  "/dealer/:id",
+  auth(),
+  role("ADMIN"),
+  userController.updateADealer
+);
 
-// INSTITUTION AND PERSONAL CRUD AND MANAGEMENT 
+// INSTITUTION AND PERSONAL CRUD AND MANAGEMENT
 router.post("/account/add", auth(), role("ADMIN"), userController.addAccount);
-router.get("/accounts/all", auth(), role("ADMIN"), userController.getAllAccounts);
+router.get(
+  "/accounts/all",
+  auth(),
+  role("ADMIN"),
+  userController.getAllAccounts
+);
 router.get("/account/:id", auth(), role("ADMIN"), userController.getAAccount);
-router.delete("/account/:id", auth(), role("ADMIN"), userController.deleteAAccount);
-router
-  .route("/:userId")
-  .patch(
-    auth(),
-    validate(userValidation.updateUser),
-    userController.updateUser
-  );
+router.delete(
+  "/account/:id",
+  auth(),
+  role("ADMIN"),
+  userController.deleteAAccount
+);
+router.patch(
+  "/account/:id",
+  auth(),
+  role("ADMIN"),
+  userController.updateAAccount
+);
 
 module.exports = router;
 
@@ -182,6 +202,51 @@ module.exports = router;
  */
 /**
  * @swagger
+ * /users/dealer/{id}:
+ *   patch:
+ *     summary: Update Dealers
+ *     description: Logged in users can only update their own information. Only admins can update other users.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Enter personal or institution id to get personal or institution
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               payment_range_min:
+ *                 type: integer
+ *               payment_range_max:
+ *                 type: integer
+ *             example:
+ *               name: update name
+ *               payment_range_min: 0
+ *               payment_range_max: 200
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
  * /users/account/add:
  *   post:
  *     summary: Add a peronal or institution account
@@ -245,7 +310,7 @@ module.exports = router;
  *         name: model
  *         schema:
  *           type: integer
- *         description: Enter 1 for Institution , 2 for Personal 
+ *         description: Enter 1 for Institution , 2 for Personal
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -337,13 +402,11 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
 /**
  * @swagger
- * /users/{id}:
- *
+ * /users/account/{id}:
  *   patch:
- *     summary: Update user personal information
+ *     summary: Update Accounts
  *     description: Logged in users can only update their own information. Only admins can update other users.
  *     tags: [Users]
  *     security:
@@ -354,7 +417,12 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Enter personal or institution id to get personal or institution
+ *       - in: query
+ *         name: model
+ *         schema:
+ *           type: integer
+ *         description: Enter 1 for Institution , 2 for Personal
  *     requestBody:
  *       required: true
  *       content:
@@ -362,52 +430,10 @@ module.exports = router;
  *           schema:
  *             type: object
  *             properties:
- *               firstName:
+ *               name:
  *                 type: string
- *               lastName:
- *                 type: string
- *               age:
- *                  type: integer
- *               height:
- *                  type: string
- *               weight:
- *                  type: float
- *               city:
- *                  type: string
- *               postalCode:
- *                  type: string
- *               gender:
- *                  type: integer
- *               religion:
- *                  type: integer
- *               relationshipIntention:
- *                  type: integer
- *               location:
- *                 type: object
- *                 properties:
- *                   name:
- *                     type: string
- *                   lat:
- *                     type: number
- *                   lng:
- *                     type: number
  *             example:
- *               firstName: update name
- *               lastName: update last name
- *               age: 22
- *               height: 6'8"
- *               weight: 54.6
- *               city: Lahore
- *               postalCode: "20456"
- *               gender: 0
- *               religion: 2
- *               relationshipIntention: 2
- *               location:
- *                 name: Florida Gulf Coast University FGCU FGCU Boulevard Fort Myers FL USA
- *                 latitude: 26.4626967
- *                 longitude: -81.7800748
- *                 latitudeDelta: 0.0922
- *                 longitudeDelta: 0.0421
+ *               name: update name
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/UserResponse'

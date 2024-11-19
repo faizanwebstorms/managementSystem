@@ -9,6 +9,9 @@ const dealerSchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
     },
+    name: {
+      type: String,
+    },
     payment_range_min: {
       type: Number,
     },

@@ -38,37 +38,37 @@ const addDealer = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const getAllDealers = catchAsync(async (req, res) => {
-  const options = pick(req.query, ['limit', 'page']);
+  const options = pick(req.query, ["limit", "page"]);
   if (req.query.sortBy) {
     options.sort = {};
     // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
+    options.sort[req.query.sortBy.split(":")[0]] =
+      req.query.sortBy.split(":")[1];
   }
   let filter = {};
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
-    console.log('searchTerm:', term);
-  
+    console.log("searchTerm:", term);
+
     // Try to parse the term as a number for the dealer fields
     const termAsNumber = parseFloat(term);
-  
+
     filter = {
       $or: [
-        { 'user.firstName': { $regex: term, $options: 'i' } },
-        { 'user.lastName': { $regex: term, $options: 'i' } },
-        { 'user.username': { $regex: term, $options: 'i' } },
+        { "user.firstName": { $regex: term, $options: "i" } },
+        { "user.lastName": { $regex: term, $options: "i" } },
+        { "user.username": { $regex: term, $options: "i" } },
         ...(isNaN(termAsNumber)
           ? [] // If the term is not a number, don't include numeric fields
           : [
               { payment_range_min: termAsNumber },
               { payment_range_max: termAsNumber },
-            ]
-        )
+            ]),
       ],
     };
   }
-  
-  const dealers = await userService.getAllDealers(filter , options);
+
+  const dealers = await userService.getAllDealers(filter, options);
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, dealers));
 });
 
@@ -86,12 +86,30 @@ const getADealer = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const deleteADealer = catchAsync(async (req, res) => {
-  const dealer = await Dealer.findById(req.params.id).select('_id userId');
-  if(!dealer){
+  const dealer = await Dealer.findById(req.params.id).select("_id userId");
+  if (!dealer) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.dealer.notFound);
   }
   const deleteDealer = await userService.deleteADealer(dealer);
-  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, deleteDealer));
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, deleteDealer)
+  );
+});
+
+/**
+ * Update a Dealer
+ * @type {(function(*, *, *): void)|*}
+ */
+const updateADealer = catchAsync(async (req, res) => {
+  const dealer = await Dealer.findById(req.params.id);
+
+  if (!dealer) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.dealer.notFound);
+  }
+  const updateDealer = await userService.updateADealer(dealer, req.body);
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, updateDealer)
+  );
 });
 
 /**
@@ -108,11 +126,12 @@ const addAccount = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const getAllAccounts = catchAsync(async (req, res) => {
-  const options = pick(req.query, ['limit', 'page']);
+  const options = pick(req.query, ["limit", "page"]);
   if (req.query.sortBy) {
     options.sort = {};
     // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(':')[0]] = req.query.sortBy.split(':')[1];
+    options.sort[req.query.sortBy.split(":")[0]] =
+      req.query.sortBy.split(":")[1];
   }
   let filter = {};
   if (req.query.searchTerm) {
@@ -120,13 +139,17 @@ const getAllAccounts = catchAsync(async (req, res) => {
 
     filter = {
       $or: [
-        { 'name': { $regex: term, $options: 'i' } },
-        { 'user.email': { $regex: term, $options: 'i' } },
+        { name: { $regex: term, $options: "i" } },
+        { "user.email": { $regex: term, $options: "i" } },
       ],
     };
   }
-  
-  const account = await userService.getAllAccounts(filter , options , req.query.model);
+
+  const account = await userService.getAllAccounts(
+    filter,
+    options,
+    req.query.model
+  );
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
 });
 
@@ -135,7 +158,10 @@ const getAllAccounts = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const getAAccount = catchAsync(async (req, res) => {
-  const account = await userService.getAAccount(req.params?.id , req.query.model);
+  const account = await userService.getAAccount(
+    req.params?.id,
+    req.query.model
+  );
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
 });
 
@@ -145,14 +171,44 @@ const getAAccount = catchAsync(async (req, res) => {
  */
 const deleteAAccount = catchAsync(async (req, res) => {
   let account;
-  if (req.query.model == 1)   account = await Institution.findById(req.params.id).select('_id userId');
-  else if (req.query.model == 2) account = await Personal.findById(req.params.id).select('_id userId');
-  
-  if(!account){
+  if (req.query.model == 1)
+    account = await Institution.findById(req.params.id).select("_id userId");
+  else if (req.query.model == 2)
+    account = await Personal.findById(req.params.id).select("_id userId");
+
+  if (!account) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
   }
-  const deleteAccount = await userService.deleteAAccount(account , req.query.model);
-  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, deleteAccount));
+  const deleteAccount = await userService.deleteAAccount(
+    account,
+    req.query.model
+  );
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, deleteAccount)
+  );
+});
+
+/**
+ * Update a Personal or Institution
+ * @type {(function(*, *, *): void)|*}
+ */
+const updateAAccount = catchAsync(async (req, res) => {
+  let account;
+  if (req.query.model == 1) account = await Institution.findById(req.params.id);
+  else if (req.query.model == 2)
+    account = await Personal.findById(req.params.id);
+
+  if (!account) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
+  }
+  const updateAccount = await userService.updateAAccount(
+    account,
+    req.query.model,
+    req.body
+  );
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, updateAccount)
+  );
 });
 module.exports = {
   updateUser,
@@ -163,5 +219,7 @@ module.exports = {
   addAccount,
   getAAccount,
   getAllAccounts,
-  deleteAAccount
+  deleteAAccount,
+  updateAAccount,
+  updateADealer,
 };
