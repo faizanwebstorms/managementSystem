@@ -58,6 +58,7 @@ const getAllDealers = catchAsync(async (req, res) => {
         { "user.firstName": { $regex: term, $options: "i" } },
         { "user.lastName": { $regex: term, $options: "i" } },
         { "user.username": { $regex: term, $options: "i" } },
+        { name: { $regex: term, $options: "i" } },
         ...(isNaN(termAsNumber)
           ? [] // If the term is not a number, don't include numeric fields
           : [

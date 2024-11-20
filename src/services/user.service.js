@@ -4,6 +4,8 @@ const ApiError = require("../utils/ApiError");
 const { roles } = require("../config/user");
 const mongoose = require("mongoose");
 const { log } = require("winston");
+const bcrypt = require("bcryptjs");
+
 /**
  * filter User Data from request
  * @param data
@@ -290,9 +292,21 @@ const deleteADealer = async (dealer) => {
  */
 const updateADealer = async (dealer, updateBody) => {
   try {
+    let user;
+    if (updateBody?.email || updateBody?.password) {
+      user = await User.findById(dealer?.userId);
+      updateBody?.email && (await validateEmailandUsername(updateBody));
+      updateBody?.email && Object.assign(user, { email: updateBody?.email });
+
+      updateBody?.password && (await bcrypt.hash(updateBody?.password, 8));
+      updateBody?.password &&
+        Object.assign(user, { password: updateBody?.password });
+
+      await user.save();
+    }
     Object.assign(dealer, updateBody);
     await dealer.save();
-    return dealer;
+    return { dealer, user };
   } catch (e) {
     throw e;
   }
@@ -412,9 +426,23 @@ const deleteAAccount = async (account, model) => {
  */
 const updateAAccount = async (account, model, updateBody) => {
   try {
+    let user;
+    if (updateBody?.email || updateBody?.password) {
+      user = await User.findById(account?.userId);
+      updateBody?.email && (await validateEmailandUsername(updateBody));
+      updateBody?.email && Object.assign(user, { email: updateBody?.email });
+
+      updateBody?.password && (await bcrypt.hash(updateBody?.password, 8));
+      updateBody?.password &&
+        Object.assign(user, { password: updateBody?.password });
+
+      await user.save();
+    }
+
     Object.assign(account, updateBody);
     await account.save();
-    return account;
+
+    return { user, account };
   } catch (e) {
     throw e;
   }

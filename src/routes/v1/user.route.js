@@ -225,6 +225,10 @@ module.exports = router;
  *             properties:
  *               name:
  *                 type: string
+ *               email:
+ *                 type: email
+ *               password:
+ *                 type: string
  *               payment_range_min:
  *                 type: integer
  *               payment_range_max:
@@ -233,6 +237,8 @@ module.exports = router;
  *               name: update name
  *               payment_range_min: 0
  *               payment_range_max: 200
+ *               email: 'update1@gmail.com'
+ *               password: 'Password1'
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/UserResponse'
@@ -432,8 +438,14 @@ module.exports = router;
  *             properties:
  *               name:
  *                 type: string
+ *               email:
+ *                 type: email
+ *               password:
+ *                 type: string
  *             example:
  *               name: update name
+ *               email: 'update1@gmail.com'
+ *               password: 'Password1'
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/UserResponse'
