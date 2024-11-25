@@ -10,24 +10,34 @@ const router = express.Router();
 router.post(
   "/type/add",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN", "DEALER"]),
   paymentController.addPaymentMethodType
 );
 router.get(
   "/type/:id",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN", "DEALER"]),
   paymentController.getAPaymentMethodType
 );
 router.get(
   "/type/all/get",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN", "DEALER"]),
   paymentController.getAllPaymentMethodType
 );
 
-router.post("/add", auth(), role("ADMIN"), paymentController.addPaymentMethod);
-router.get("/:id", auth(), role("ADMIN"), paymentController.getAPaymentMethod);
+router.post(
+  "/add",
+  auth(),
+  role(["ADMIN", "DEALER"]),
+  paymentController.addPaymentMethod
+);
+router.get(
+  "/:id",
+  auth(),
+  role(["ADMIN", "DEALER"]),
+  paymentController.getAPaymentMethod
+);
 router.get(
   "/all/get",
   auth(),

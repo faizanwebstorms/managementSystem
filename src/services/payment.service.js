@@ -11,7 +11,7 @@ const _filterPaymentMethodTypeData = (data) => {
 const _filterPaymentMethodData = (data) => {
   return {
     dealerId: data?.dealerId,
-    typeId: data?.dealerId,
+    typeId: data?.typeId,
     name: data?.name,
     detail: data?.detail,
     paymentMinLimit: data?.paymentMinLimit,

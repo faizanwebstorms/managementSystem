@@ -36,6 +36,7 @@ const _filterDealerData = (data, userId) => {
     payment_range_max: data?.paymentRangeMax,
     classification: data?.classification,
     name: data?.name,
+    paymentMethodType: data?.paymentMethodType,
   };
 };
 
@@ -45,10 +46,11 @@ const _filterDealerData = (data, userId) => {
  * @returns {*}
  * @private
  */
-const _filterAccountData = (data, userId) => {
+const _filterAccountData = (data, userId, role) => {
   return {
     userId,
     name: data?.name,
+    type: role,
   };
 };
 
@@ -318,7 +320,7 @@ const updateADealer = async (dealer, updateBody) => {
  * @param {Object} body
  * @returns {Promise<User>}
  */
-const addAccount = async (body) => {
+const addAccount = async (body, loggedInUser) => {
   try {
     const user = await createUser(body);
 
@@ -329,7 +331,9 @@ const addAccount = async (body) => {
     if (user?.role === roles.INSTITUTION) {
       account = await Institution.create(_filterAccountData(body, user?._id));
     } else if (user?.role === roles.PERSONAL) {
-      account = await Personal.create(_filterAccountData(body, user?._id));
+      account = await Personal.create(
+        _filterAccountData(body, user?._id, loggedInUser?.role)
+      );
     }
 
     return { user, account };
@@ -342,9 +346,12 @@ const addAccount = async (body) => {
  * Get all Personal or Institution Accounts with user information using aggregate and aggregatePaginate
  * @returns {Promise<Object>}
  */
-const getAllAccounts = async (filter, options, model) => {
+const getAllAccounts = async (filter, options, model, user) => {
   try {
     // Build the aggregation pipeline
+    if (model === 2) {
+      filter.type = user.role;
+    }
     const pipeline = [
       {
         $lookup: {
@@ -380,7 +387,7 @@ const getAllAccounts = async (filter, options, model) => {
  * Get a Personal or Institution
  * @returns {Promise<User>}
  */
-const getAAccount = async (id, model) => {
+const getAAccount = async (id, model, user) => {
   try {
     let account;
     if (model == 1) {
@@ -389,7 +396,7 @@ const getAAccount = async (id, model) => {
         "_id  email role isEmailVerified"
       );
     } else if (model == 2) {
-      account = await Personal.findOne({ _id: id }).populate(
+      account = await Personal.findOne({ _id: id, type: user.role }).populate(
         "userId",
         "_id email role isEmailVerified"
       );

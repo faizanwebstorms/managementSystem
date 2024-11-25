@@ -13,6 +13,9 @@ const paymentMethodTypeSchema = mongoose.Schema(
     status: {
       type: Boolean,
     },
+    type: {
+      type: Number,
+    },
   },
 
   {

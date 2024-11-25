@@ -48,7 +48,6 @@ const getAllDealers = catchAsync(async (req, res) => {
   let filter = {};
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
-    console.log("searchTerm:", term);
 
     // Try to parse the term as a number for the dealer fields
     const termAsNumber = parseFloat(term);
@@ -116,7 +115,7 @@ const updateADealer = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const addAccount = catchAsync(async (req, res) => {
-  const account = await userService.addAccount(req.body);
+  const account = await userService.addAccount(req.body, req.user);
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
 });
 
@@ -147,7 +146,8 @@ const getAllAccounts = catchAsync(async (req, res) => {
   const account = await userService.getAllAccounts(
     filter,
     options,
-    req.query.model
+    req.query.model,
+    req.user
   );
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
 });
@@ -159,7 +159,8 @@ const getAllAccounts = catchAsync(async (req, res) => {
 const getAAccount = catchAsync(async (req, res) => {
   const account = await userService.getAAccount(
     req.params?.id,
-    req.query.model
+    req.query.model,
+    req.user
   );
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
 });
@@ -173,7 +174,10 @@ const deleteAAccount = catchAsync(async (req, res) => {
   if (req.query.model == 1)
     account = await Institution.findById(req.params.id).select("_id userId");
   else if (req.query.model == 2)
-    account = await Personal.findById(req.params.id).select("_id userId");
+    account = await Personal.findOne({
+      _id: req.params.id,
+      type: req.user.role,
+    }).select("_id userId");
 
   if (!account) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
@@ -195,7 +199,10 @@ const updateAAccount = catchAsync(async (req, res) => {
   let account;
   if (req.query.model == 1) account = await Institution.findById(req.params.id);
   else if (req.query.model == 2)
-    account = await Personal.findById(req.params.id);
+    account = await Personal.findOne({
+      _id: req.params.id,
+      type: req.user.role,
+    });
 
   if (!account) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);

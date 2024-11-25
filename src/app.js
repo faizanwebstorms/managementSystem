@@ -14,10 +14,12 @@ const routes = require("./routes/v1");
 const { errorConverter, errorHandler } = require("./middlewares/error");
 const ApiError = require("./utils/ApiError");
 const logger = require("./config/logger");
+const seedPaymentTypes = require("./seeders/paymentType.seeder");
 
 mongoose.set("strictQuery", true);
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info("Connected to MongoDB");
+  // seedPaymentTypes();
 });
 
 const app = express();

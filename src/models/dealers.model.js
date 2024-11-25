@@ -18,6 +18,9 @@ const dealerSchema = mongoose.Schema(
     payment_range_max: {
       type: Number,
     },
+    paymentMethodType: {
+      type: Number,
+    },
     classification: {
       type: Number,
       enum: userConfig.getDealerClassifications,

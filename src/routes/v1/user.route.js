@@ -8,44 +8,64 @@ const role = require("../../middlewares/role");
 const router = express.Router();
 
 // DEALER CRUD AND MANAGEMENT
-router
-  .route("/dealer/add")
-  .post(auth(), role("ADMIN"), userController.addDealer);
-router.post("/dealer/add", auth(), role("ADMIN"), userController.addDealer);
-router.get("/dealers/all", auth(), role("ADMIN"), userController.getAllDealers);
-router.get("/dealer/:id", auth(), role("ADMIN"), userController.getADealer);
+// router
+//   .route("/dealer/add")
+//   .post(auth(), role(["ADMIN"]), userController.addDealer);
+
+router.post("/dealer/add", auth(), role(["ADMIN"]), userController.addDealer);
+
+router.get(
+  "/dealers/all",
+  auth(),
+  role(["ADMIN"]),
+  userController.getAllDealers
+);
+
+router.get("/dealer/:id", auth(), role(["ADMIN"]), userController.getADealer);
+
 router.delete(
   "/dealer/:id",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN"]),
   userController.deleteADealer
 );
+
 router.patch(
   "/dealer/:id",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN"]),
   userController.updateADealer
 );
 
 // INSTITUTION AND PERSONAL CRUD AND MANAGEMENT
-router.post("/account/add", auth(), role("ADMIN"), userController.addAccount);
+router.post(
+  "/account/add",
+  auth(),
+  role(["ADMIN", "DEALER", "INSTITUTION"]),
+  userController.addAccount
+);
 router.get(
   "/accounts/all",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN", "DEALER", "INSTITUTION"]),
   userController.getAllAccounts
 );
-router.get("/account/:id", auth(), role("ADMIN"), userController.getAAccount);
+router.get(
+  "/account/:id",
+  auth(),
+  role(["ADMIN", "DEALER", "INSTITUTION"]),
+  userController.getAAccount
+);
 router.delete(
   "/account/:id",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN", "DEALER", "INSTITUTION"]),
   userController.deleteAAccount
 );
 router.patch(
   "/account/:id",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN", "DEALER", "INSTITUTION"]),
   userController.updateAAccount
 );
 
@@ -90,13 +110,15 @@ module.exports = router;
  *                  type: integer
  *               paymentRangeMax:
  *                  type: integer
+ *               paymentMethodType:
+ *                  type: integer
  *             example:
  *               firstName: Faizan Ibrahim
  *               email: fake@example.com
  *               password: Password1@
  *               paymentRangeMin: 0
  *               paymentRangeMax: 220
- *
+ *               paymentMethodType: 0
  *
  *     responses:
  *       "200":

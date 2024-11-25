@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 const { toJSON, paginate } = require("./plugins");
-
+const { getPersonalTypes } = require("../config/user");
 
 const personalSchema = mongoose.Schema(
   {
@@ -11,6 +11,10 @@ const personalSchema = mongoose.Schema(
     },
     name: {
       type: String,
+    },
+    type: {
+      type: Number,
+      enum: getPersonalTypes,
     },
   },
 
