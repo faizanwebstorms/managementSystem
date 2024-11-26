@@ -38,36 +38,11 @@ router.patch(
 );
 
 // INSTITUTION AND PERSONAL CRUD AND MANAGEMENT
-router.post(
-  "/account/add",
-  auth(),
-  role(["ADMIN", "DEALER", "INSTITUTION"]),
-  userController.addAccount
-);
-router.get(
-  "/accounts/all",
-  auth(),
-  role(["ADMIN", "DEALER", "INSTITUTION"]),
-  userController.getAllAccounts
-);
-router.get(
-  "/account/:id",
-  auth(),
-  role(["ADMIN", "DEALER", "INSTITUTION"]),
-  userController.getAAccount
-);
-router.delete(
-  "/account/:id",
-  auth(),
-  role(["ADMIN", "DEALER", "INSTITUTION"]),
-  userController.deleteAAccount
-);
-router.patch(
-  "/account/:id",
-  auth(),
-  role(["ADMIN", "DEALER", "INSTITUTION"]),
-  userController.updateAAccount
-);
+router.post("/account/add", auth(), userController.addAccount);
+router.get("/accounts/all", auth(), userController.getAllAccounts);
+router.get("/account/:id", auth(), userController.getAAccount);
+router.delete("/account/:id", auth(), userController.deleteAAccount);
+router.patch("/account/:id", auth(), userController.updateAAccount);
 
 module.exports = router;
 
