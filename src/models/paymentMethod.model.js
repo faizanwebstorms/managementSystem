@@ -4,9 +4,9 @@ const { toJSON, paginate } = require("./plugins");
 
 const paymentMethodSchema = mongoose.Schema(
   {
-    dealerId: {
+    userId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "Dealer",
+      ref: "User",
     },
     typeId: {
       type: mongoose.SchemaTypes.ObjectId,
