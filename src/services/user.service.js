@@ -355,6 +355,7 @@ const getAllAccounts = async (filter, options, model, user) => {
       filter = { ...filter, type: user.role, personalHolderId: user._id };
       if (user.role === roles.ADMIN) {
         delete filter.type;
+        delete filter.personalHolderId;
       }
     }
     const pipeline = [
