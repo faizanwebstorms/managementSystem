@@ -39,7 +39,7 @@ const login = async (email, password) => {
       userDetail = await Personal.findOne({ userId: user?._id });
     }
 
-    return user;
+    return { user, userDetail };
   } catch (e) {
     throw e;
   }
