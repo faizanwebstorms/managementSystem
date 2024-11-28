@@ -352,7 +352,7 @@ const getAllAccounts = async (filter, options, model, user) => {
     // Build the aggregation pipeline
     if (model == 2) {
       filter.type = user.role;
-      filter = { ...filter, type: user.role };
+      filter = { ...filter, type: user.role, personalHolderId: user._id };
       if (user.role === roles.ADMIN) {
         delete filter.type;
       }
