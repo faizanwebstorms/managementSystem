@@ -38,7 +38,7 @@ const login = async (email, password) => {
     } else if (user.role === roles.PERSONAL) {
       userDetail = await Personal.findOne({ userId: user?._id });
     }
-    user = { ...user, userDetail };
+    user = { ...user._doc, userDetail };
 
     return user;
   } catch (e) {
