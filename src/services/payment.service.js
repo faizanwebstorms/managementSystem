@@ -1,3 +1,4 @@
+const { roles } = require("../config/user");
 const { PaymentMethodType, PaymentMethod } = require("../models");
 
 const _filterPaymentMethodTypeData = (data) => {
@@ -107,6 +108,8 @@ const getAllPaymentMethod = async (options, filter, loggedInUser) => {
     // Build the aggregation pipeline
     // filter = { ...filter, dealerId: loggedInUser?._id };
     filter.dealerId = loggedInUser?._id;
+
+    loggedInUser?.role === roles.ADMIN && delete filter.dealerId;
 
     const pipeline = [{ $match: filter }];
 
