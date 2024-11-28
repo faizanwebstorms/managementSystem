@@ -41,7 +41,7 @@ router.get(
 router.get(
   "/all/get",
   auth(),
-  role("ADMIN"),
+  role(["ADMIN", "DEALER"]),
   paymentController.getAllPaymentMethods
 );
 module.exports = router;
