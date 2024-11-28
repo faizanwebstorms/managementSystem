@@ -13,6 +13,7 @@ const _filterPaymentMethodData = (data) => {
     dealerId: data?.dealerId,
     typeId: data?.typeId,
     name: data?.name,
+    iban: data?.iban,
     detail: data?.detail,
     paymentMinLimit: data?.paymentMinLimit,
     paymentMaxLimit: data?.paymentMaxLimit,
@@ -101,9 +102,12 @@ const addPaymentMethod = async (body) => {
  * @param {Object} body
  * @returns {Promise<User>}
  */
-const getAllPaymentMethod = async (options, filter) => {
+const getAllPaymentMethod = async (options, filter, loggedInUser) => {
   try {
     // Build the aggregation pipeline
+    // filter = { ...filter, dealerId: loggedInUser?._id };
+    filter.dealerId = loggedInUser?._id;
+
     const pipeline = [{ $match: filter }];
 
     // Apply pagination options

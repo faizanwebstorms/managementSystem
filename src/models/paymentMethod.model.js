@@ -15,6 +15,9 @@ const paymentMethodSchema = mongoose.Schema(
     name: {
       type: String,
     },
+    iban: {
+      type: String,
+    },
     detail: {
       type: String,
     },

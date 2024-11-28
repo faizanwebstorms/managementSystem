@@ -112,7 +112,8 @@ const getAllPaymentMethods = catchAsync(async (req, res) => {
   }
   const paymentMethodType = await paymentService.getAllPaymentMethod(
     options,
-    filter
+    filter,
+    req.user
   );
   res.send(
     Helper.apiResponse(httpStatus.OK, messages.api.success, paymentMethodType)
