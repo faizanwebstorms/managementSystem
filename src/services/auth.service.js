@@ -21,7 +21,7 @@ const { roles } = require("../config/user");
  */
 const login = async (email, password) => {
   try {
-    const user = await userService.findByClause({
+    let user = await userService.findByClause({
       $or: [{ email }, { username: email }],
     });
     if (!user || !(await user.isPasswordMatch(password))) {
@@ -38,8 +38,9 @@ const login = async (email, password) => {
     } else if (user.role === roles.PERSONAL) {
       userDetail = await Personal.findOne({ userId: user?._id });
     }
+    user = { ...user, userDetail };
 
-    return { user, userDetail };
+    return user;
   } catch (e) {
     throw e;
   }
