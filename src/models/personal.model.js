@@ -16,6 +16,9 @@ const personalSchema = mongoose.Schema(
       type: Number,
       enum: getPersonalTypes,
     },
+    personalHolderId: {
+      type: mongoose.SchemaTypes.ObjectId,
+    },
   },
 
   {

@@ -46,11 +46,12 @@ const _filterDealerData = (data, userId) => {
  * @returns {*}
  * @private
  */
-const _filterAccountData = (data, userId, role) => {
+const _filterAccountData = (data, userId, loggedInUser) => {
   return {
     userId,
     name: data?.name,
-    type: role,
+    type: loggedInUser?.role,
+    personalHolderId: loggedInUser?._id,
   };
 };
 
@@ -332,7 +333,7 @@ const addAccount = async (body, loggedInUser) => {
       account = await Institution.create(_filterAccountData(body, user?._id));
     } else if (user?.role === roles.PERSONAL) {
       account = await Personal.create(
-        _filterAccountData(body, user?._id, loggedInUser?.role)
+        _filterAccountData(body, user?._id, loggedInUser)
       );
     }
 
