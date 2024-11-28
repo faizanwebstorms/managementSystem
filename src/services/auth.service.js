@@ -1,9 +1,17 @@
 const userService = require("./user.service");
-const { Token, OTP, User } = require("../models");
+const {
+  Token,
+  OTP,
+  User,
+  Dealer,
+  Institution,
+  Personal,
+} = require("../models");
 const { tokenTypes } = require("../config/tokens");
 const { otpTypes } = require("../config/otp");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
+const { roles } = require("../config/user");
 
 /**
  * Login with username and password
@@ -21,6 +29,14 @@ const login = async (email, password) => {
         httpStatus.UNAUTHORIZED,
         "Incorrect email/username or password"
       );
+    }
+    let userDetail;
+    if (user.role === roles.DEALER) {
+      userDetail = await Dealer.findOne({ userId: user?._id });
+    } else if (user.role === roles.INSTITUTION) {
+      userDetail = await Institution.findOne({ userId: user?._id });
+    } else if (user.role === roles.PERSONAL) {
+      userDetail = await Personal.findOne({ userId: user?._id });
     }
 
     return user;
