@@ -107,9 +107,9 @@ const getAllPaymentMethod = async (options, filter, loggedInUser) => {
   try {
     // Build the aggregation pipeline
     // filter = { ...filter, dealerId: loggedInUser?._id };
-    filter.dealerId = loggedInUser?._id;
+    filter.userId = loggedInUser?._id;
 
-    loggedInUser?.role === roles.ADMIN && delete filter.dealerId;
+    loggedInUser?.role === roles.ADMIN && delete filter.userId;
 
     const pipeline = [{ $match: filter }];
 
