@@ -44,9 +44,10 @@ const getAllPaymentMethodType = catchAsync(async (req, res) => {
     options.sort[req.query.sortBy.split(":")[0]] =
       req.query.sortBy.split(":")[1];
   }
+  console.log("req.query.isParent", req.query.isParent);
   let filter = {
     ...(req.query.isParent && {
-      isParent: req.query.isParent === 1 ? true : false,
+      isParent: req.query.isParent == 1 ? true : false,
     }),
   };
   if (req.query.searchTerm) {
