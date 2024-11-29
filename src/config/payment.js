@@ -25,7 +25,17 @@ const paymentTypesSeederData = [
   },
 ];
 
+const fastTransferStatus = {
+  ACTIVE: 0,
+  PASSIVE: 1,
+};
+const bankAccountStatus = {
+  ACTIVE: 0,
+  PASSIVE: 1,
+};
 module.exports = {
   paymentMethodTypes,
   paymentTypesSeederData,
+  fastTransferStatus,
+  bankAccountStatus,
 };

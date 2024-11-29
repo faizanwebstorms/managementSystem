@@ -22,8 +22,8 @@ const _filterPaymentMethodData = (data) => {
     totalLimit: data?.totalLimit,
     currency: data?.currency,
     isFull: data?.isFull,
-    isfastActive: data?.isfastActive,
-    isBankActive: data?.isBankActive,
+    fastTransferStatus: data?.fastTransferStatus,
+    bankAccountStatus: data?.bankAccountStatus,
   };
 };
 /**

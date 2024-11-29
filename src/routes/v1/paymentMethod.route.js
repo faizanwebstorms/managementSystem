@@ -194,9 +194,9 @@ module.exports = router;
  *                 type: string
  *               isFull:
  *                  type: boolean
- *               isFastActive:
+ *               fastTransferStatus:
  *                  type: number
- *               isBankActive:
+ *               bankAccountStatus:
  *                  type: number
  *             example:
  *               dealerId: 672e050e7f762523835d1eec
@@ -208,8 +208,8 @@ module.exports = router;
  *               totalLimit: 10000
  *               currency: USD
  *               isFull: false
- *               isFastActive: 1
- *               isBankActive: 1
+ *               fastTransferStatus: 1
+ *               bankAccountStatus: 1
  *     responses:
  *       "200":
  *         $ref: '#components/responses/UserRegistered'

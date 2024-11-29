@@ -36,10 +36,10 @@ const paymentMethodSchema = mongoose.Schema(
     isFull: {
       type: Boolean,
     },
-    isfastActive: {
+    fastTransferStatus: {
       type: Number,
     },
-    isBankActive: {
+    bankAccountStatus: {
       type: Number,
     },
   },
