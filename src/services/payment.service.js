@@ -6,6 +6,7 @@ const _filterPaymentMethodTypeData = (data) => {
     name: data?.name,
     description: data?.description,
     status: data?.status,
+    isParent: false,
   };
 };
 
@@ -21,6 +22,8 @@ const _filterPaymentMethodData = (data) => {
     totalLimit: data?.totalLimit,
     currency: data?.currency,
     isFull: data?.isFull,
+    isfastActive: data?.isfastActive,
+    isBankActive: data?.isBankActive,
   };
 };
 /**
@@ -64,8 +67,8 @@ const getAPaymentMethodType = async (id) => {
 const getAllPaymentMethodyType = async (options, filter) => {
   try {
     // Build the aggregation pipeline
+    console.log("filter", filter);
     const pipeline = [{ $match: filter }];
-    console.log("pipeline", pipeline);
     // Apply pagination options
     const paymentMethodTypes = await PaymentMethodType.aggregatePaginate(
       PaymentMethodType.aggregate(pipeline),

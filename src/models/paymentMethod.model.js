@@ -36,6 +36,12 @@ const paymentMethodSchema = mongoose.Schema(
     isFull: {
       type: Boolean,
     },
+    isfastActive: {
+      type: Number,
+    },
+    isBankActive: {
+      type: Number,
+    },
   },
 
   {

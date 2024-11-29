@@ -16,6 +16,9 @@ const paymentMethodTypeSchema = mongoose.Schema(
     type: {
       type: Number,
     },
+    isParent: {
+      type: Boolean,
+    },
   },
 
   {

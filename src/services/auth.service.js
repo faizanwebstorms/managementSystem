@@ -30,6 +30,7 @@ const login = async (email, password) => {
         "Incorrect email/username or password"
       );
     }
+
     let userDetail;
     if (user.role === roles.DEALER) {
       userDetail = await Dealer.findOne({ userId: user?._id });

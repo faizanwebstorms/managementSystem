@@ -73,10 +73,13 @@ module.exports = router;
  *                 type: string
  *               status:
  *                  type: boolean
+ *               isParent:
+ *                  type: boolean
  *             example:
  *               name: Fsample method
  *               description: It is a goood method
  *               status: true
+ *               isParent: false
  *     responses:
  *       "200":
  *         $ref: '#components/responses/UserRegistered'
@@ -124,6 +127,11 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: Seach by name , description etc etc
+ *       - in: query
+ *         name: isParent
+ *         schema:
+ *           type: number
+ *         description: Seach by isParent
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -186,6 +194,10 @@ module.exports = router;
  *                 type: string
  *               isFull:
  *                  type: boolean
+ *               isFastActive:
+ *                  type: number
+ *               isBankActive:
+ *                  type: number
  *             example:
  *               dealerId: 672e050e7f762523835d1eec
  *               typeId: 6735b1192772b4aad9f2449e
@@ -196,6 +208,8 @@ module.exports = router;
  *               totalLimit: 10000
  *               currency: USD
  *               isFull: false
+ *               isFastActive: 1
+ *               isBankActive: 1
  *     responses:
  *       "200":
  *         $ref: '#components/responses/UserRegistered'

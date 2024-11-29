@@ -36,16 +36,19 @@ const getAPaymentMethodType = catchAsync(async (req, res) => {
  * @type {(function(*, *, *): void)|*}
  */
 const getAllPaymentMethodType = catchAsync(async (req, res) => {
-  console.log("req.query", req.query);
   const options = pick(req.query, ["limit", "page"]);
-  console.log("options", options);
+
   if (req.query.sortBy) {
     options.sort = {};
     // eslint-disable-next-line prefer-destructuring
     options.sort[req.query.sortBy.split(":")[0]] =
       req.query.sortBy.split(":")[1];
   }
-  let filter = {};
+  let filter = {
+    ...(req.query.isParent && {
+      isParent: req.query.isParent === 1 ? true : false,
+    }),
+  };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
 
@@ -56,6 +59,7 @@ const getAllPaymentMethodType = catchAsync(async (req, res) => {
       ],
     };
   }
+
   const paymentMethodType = await paymentService.getAllPaymentMethodyType(
     options,
     filter
