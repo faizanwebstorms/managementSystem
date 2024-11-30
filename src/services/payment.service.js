@@ -67,7 +67,7 @@ const getAPaymentMethodType = async (id) => {
 const getAllPaymentMethodyType = async (options, filter) => {
   try {
     // Build the aggregation pipeline
-    console.log("filter", filter);
+
     const pipeline = [{ $match: filter }];
     // Apply pagination options
     const paymentMethodTypes = await PaymentMethodType.aggregatePaginate(
@@ -139,6 +139,33 @@ const getAPaymentMethod = async (id) => {
     throw e;
   }
 };
+
+/**
+ * Update a payment method
+ * @returns {Promise<User>}
+ */
+const updatePaymentMethod = async (updateBody, paymentMethod) => {
+  try {
+    Object.assign(paymentMethod, updateBody);
+    await paymentMethod.save();
+    return paymentMethod;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * Delete a payment method
+ * @returns {Promise<User>}
+ */
+const deletePaymentMethod = async (paymentMethod) => {
+  try {
+    await PaymentMethod.deleteOne({ _id: paymentMethod?._id });
+    return true;
+  } catch (e) {
+    throw e;
+  }
+};
 module.exports = {
   addPaymentMethodyType,
   getAllPaymentMethodyType,
@@ -146,4 +173,6 @@ module.exports = {
   getAllPaymentMethod,
   getAPaymentMethodType,
   getAPaymentMethod,
+  updatePaymentMethod,
+  deletePaymentMethod,
 };

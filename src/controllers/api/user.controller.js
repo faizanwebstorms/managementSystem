@@ -134,7 +134,6 @@ const getAllAccounts = catchAsync(async (req, res) => {
   let filter = {};
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
-
     filter = {
       $or: [
         { name: { $regex: term, $options: "i" } },

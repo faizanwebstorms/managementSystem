@@ -37,6 +37,8 @@ const _filterDealerData = (data, userId) => {
     classification: data?.classification,
     name: data?.name,
     paymentMethodType: data?.paymentMethodType,
+    depositStatus: data?.depositStatus,
+    withdrawalStatus: data?.withdrawalStatus,
   };
 };
 

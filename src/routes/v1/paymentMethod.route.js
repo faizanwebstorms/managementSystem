@@ -44,6 +44,18 @@ router.get(
   role(["ADMIN", "DEALER"]),
   paymentController.getAllPaymentMethods
 );
+router.patch(
+  "/:id",
+  auth(),
+  role(["ADMIN", "DEALER"]),
+  paymentController.updateAPaymentMethod
+);
+router.delete(
+  "/:id",
+  auth(),
+  role(["ADMIN", "DEALER"]),
+  paymentController.deleteAPaymentMethod
+);
 module.exports = router;
 
 /**
@@ -276,6 +288,98 @@ module.exports = router;
  *           minimum: 1
  *           default: 1
  *         description: Page number
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
+ * /paymentMethods/{id}:
+ *   patch:
+ *     summary: Update Payment Methods
+ *     description: Logged in users can only update their own information. Only admins can update other users.
+ *     tags: [PaymentMethods]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Enter payment method id to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               typeId:
+ *                 type: string
+ *               name:
+ *                  type: string
+ *               detail:
+ *                 type: string
+ *               paymentMinLimit:
+ *                 type: number
+ *               paymentMaxLimit:
+ *                  type: number
+ *               totalLimit:
+ *                 type: string
+ *               currency:
+ *                 type: string
+ *               isFull:
+ *                  type: boolean
+ *               fastTransferStatus:
+ *                  type: number
+ *               bankAccountStatus:
+ *                  type: number
+ *             example:
+ *               typeId: 6735b1192772b4aad9f2449e
+ *               name: sample name
+ *               detail: sample detail
+ *               paymentMinLimit: 0
+ *               paymentMaxLimit: 1000
+ *               totalLimit: 10000
+ *               currency: USD
+ *               isFull: false
+ *               fastTransferStatus: 1
+ *               bankAccountStatus: 1
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
+ * /paymentMethods/{id}:
+ *   delete:
+ *     summary: Delete A payment method
+ *     description: Delete A payment method or institution
+ *     tags: [PaymentMethods]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Enter payment method id to delete payment method
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/UserResponse'

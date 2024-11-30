@@ -87,6 +87,10 @@ module.exports = router;
  *                  type: integer
  *               paymentMethodType:
  *                  type: integer
+ *               depositStatus:
+ *                  type: integer
+ *               withdrawalStatus:
+ *                  type: integer
  *             example:
  *               firstName: Faizan Ibrahim
  *               email: fake@example.com
@@ -94,6 +98,8 @@ module.exports = router;
  *               paymentRangeMin: 0
  *               paymentRangeMax: 220
  *               paymentMethodType: 0
+ *               depositStatus: 1
+ *               withdrawalStatus: 1
  *
  *     responses:
  *       "200":

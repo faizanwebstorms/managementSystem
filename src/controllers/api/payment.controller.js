@@ -5,6 +5,12 @@ const Helper = require("../../utils/Helper");
 const messages = require("../../config/messages");
 const { paymentService } = require("../../services");
 const pick = require("../../utils/pick");
+const PaymentMethod = require("../../models/paymentMethod.model");
+const {
+  updatePaymentMethod,
+  deletePaymentMethod,
+} = require("../../services/payment.service");
+const ApiError = require("../../utils/ApiError");
 
 /**
  * Add a payment method type
@@ -134,6 +140,46 @@ const getAPaymentMethod = catchAsync(async (req, res) => {
     Helper.apiResponse(httpStatus.OK, messages.api.success, paymentMethod)
   );
 });
+/**
+ * Update a payment method
+ * @type {(function(*, *, *): void)|*}
+ */
+const updateAPaymentMethod = catchAsync(async (req, res) => {
+  const paymentMethod = await PaymentMethod.findById(req.params.id);
+  if (!paymentMethod) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.paymentMethod.notFound);
+  }
+  const updatedPaymentMethod = await updatePaymentMethod(
+    req.body,
+    paymentMethod
+  );
+  res.send(
+    Helper.apiResponse(
+      httpStatus.OK,
+      messages.api.success,
+      updatedPaymentMethod
+    )
+  );
+});
+
+/**
+ * Delete a payment method
+ * @type {(function(*, *, *): void)|*}
+ */
+const deleteAPaymentMethod = catchAsync(async (req, res) => {
+  const paymentMethod = await PaymentMethod.findById(req.params.id);
+  if (!paymentMethod) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.paymentMethod.notFound);
+  }
+  const deletedPaymentMethod = await deletePaymentMethod(paymentMethod);
+  res.send(
+    Helper.apiResponse(
+      httpStatus.OK,
+      messages.api.success,
+      deletedPaymentMethod
+    )
+  );
+});
 module.exports = {
   addPaymentMethodType,
   getAllPaymentMethodType,
@@ -141,4 +187,6 @@ module.exports = {
   getAllPaymentMethods,
   getAPaymentMethodType,
   getAPaymentMethod,
+  updateAPaymentMethod,
+  deleteAPaymentMethod,
 };
