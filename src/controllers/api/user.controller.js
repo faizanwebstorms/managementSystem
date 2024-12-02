@@ -194,10 +194,7 @@ const updateAAccount = catchAsync(async (req, res) => {
   let account;
   if (req.query.model == 1) account = await Institution.findById(req.params.id);
   else if (req.query.model == 2)
-    account = await Personal.findOne({
-      _id: req.params.id,
-      type: req.user.role,
-    });
+    account = await Personal.findById(req.params.id);
 
   if (!account) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
