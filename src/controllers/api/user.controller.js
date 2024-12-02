@@ -173,11 +173,7 @@ const deleteAAccount = catchAsync(async (req, res) => {
   if (req.query.model == 1)
     account = await Institution.findById(req.params.id).select("_id userId");
   else if (req.query.model == 2)
-    account = await Personal.findOne({
-      _id: req.params.id,
-      type: req.user.role,
-    }).select("_id userId");
-
+    account = await Personal.findById(req.params.id).select("_id userId");
   if (!account) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
   }

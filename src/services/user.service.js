@@ -404,7 +404,7 @@ const getAAccount = async (id, model, user) => {
         "_id  email role isEmailVerified"
       );
     } else if (model == 2) {
-      account = await Personal.findOne({ _id: id, type: user.role }).populate(
+      account = await Personal.findOne({ _id: id }).populate(
         "userId",
         "_id email role isEmailVerified"
       );
