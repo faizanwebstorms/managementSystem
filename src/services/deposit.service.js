@@ -8,6 +8,7 @@ const _filterDepositData = (data) => {
     name: data?.name,
     iban: data?.iban,
     amount: data?.amount,
+    senderId: data?.senderId,
     status: depositStatus.PENDING,
   };
 };

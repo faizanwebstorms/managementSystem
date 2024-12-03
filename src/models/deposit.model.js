@@ -4,6 +4,10 @@ const { toJSON, paginate } = require("./plugins");
 
 const depositSchema = mongoose.Schema(
   {
+    senderId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Personal",
+    },
     recieverId: {
       type: mongoose.SchemaTypes.ObjectId,
     },

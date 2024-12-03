@@ -37,6 +37,8 @@ module.exports = router;
  *             properties:
  *               recieverId:
  *                 type: string
+ *               senderId:
+ *                 type: string
  *               typeId:
  *                 type: string
  *               name:
@@ -47,6 +49,7 @@ module.exports = router;
  *                  type: number
  *             example:
  *               recieverId: 674e1baea83f74879648eefd
+ *               senderId: 674e1baea83f74879648eefd
  *               typeId: 67499e413a748fa341933d6a
  *               name: opsecXPersonal
  *               iban: BR12 0012 0012 0012 0012 0012 02
