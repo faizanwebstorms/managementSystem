@@ -8,19 +8,10 @@ const role = require("../../middlewares/role");
 const router = express.Router();
 
 router.post("/", auth(), role(["PERSONAL"]), depositController.storeDeposit);
-router.get("/:id", auth(), role(["PERSONAL"]), depositController.getADeposit);
-router.get(
-  "/all/get",
-  auth(),
-  role(["PERSONAL", "DEALER", "ADMIN"]),
-  depositController.getAllDeposit
-);
-router.delete(
-  "/:id",
-  auth(),
-  role(["PERSONAL", "DEALER", "ADMIN"]),
-  depositController.deleteADeposit
-);
+router.get("/:id", auth(), depositController.getADeposit);
+router.get("/all/get", auth(), depositController.getAllDeposit);
+router.delete("/:id", auth(), depositController.deleteADeposit);
+router.patch("/:id", auth(), depositController.updateADeposit);
 module.exports = router;
 
 /**
@@ -129,6 +120,45 @@ module.exports = router;
  *     responses:
  *       "200":
  *         $ref: '#/components/responses/UserResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
+ * /deposits/{id}:
+ *   patch:
+ *     summary: Update deposit
+ *     description: Logged in users can only update their own information. Only admins can update other users.
+ *     tags: [Deposits]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Enter deposit id to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: number
+ *             example:
+ *               status: 1
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

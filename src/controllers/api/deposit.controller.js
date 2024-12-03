@@ -55,6 +55,21 @@ const getAllDeposit = catchAsync(async (req, res) => {
   const deposits = await depositService.getAllDeposits(filter, options);
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, deposits));
 });
+
+/**
+ * Update a deposit
+ * @type {(function(*, *, *): void)|*}
+ */
+const updateADeposit = catchAsync(async (req, res) => {
+  const deposit = await Deposit.findById(req.params.id);
+  if (!deposit) {
+    throw new ApiError(httpStatus.BAD_REQUEST, messages.deposit.notFound);
+  }
+  const updatedDeposit = await depositService.updateDeposit(deposit, req.body);
+  res.send(
+    Helper.apiResponse(httpStatus.OK, messages.api.success, updatedDeposit)
+  );
+});
 /**
  * Delete a deposit
  * @type {(function(*, *, *): void)|*}
@@ -74,4 +89,5 @@ module.exports = {
   getADeposit,
   getAllDeposit,
   deleteADeposit,
+  updateADeposit,
 };

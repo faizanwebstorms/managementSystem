@@ -1,3 +1,4 @@
+const { depositStatus } = require("../config/payment");
 const { Deposit } = require("../models");
 
 const _filterDepositData = (data) => {
@@ -7,6 +8,7 @@ const _filterDepositData = (data) => {
     name: data?.name,
     iban: data?.iban,
     amount: data?.amount,
+    status: depositStatus.PENDING,
   };
 };
 
@@ -78,9 +80,24 @@ const deleteDeposit = async (deposit) => {
     throw e;
   }
 };
+
+/**
+ * Update a Deposit
+ * @returns {Promise<User>}
+ */
+const updateDeposit = async (deposit, updateBody) => {
+  try {
+    Object.assign(deposit, updateBody);
+    await deposit.save();
+    return deposit;
+  } catch (e) {
+    throw e;
+  }
+};
 module.exports = {
   addDeposit,
   getADeposit,
   getAllDeposits,
   deleteDeposit,
+  updateDeposit,
 };

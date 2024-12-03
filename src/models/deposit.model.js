@@ -20,6 +20,9 @@ const depositSchema = mongoose.Schema(
     amount: {
       type: Number,
     },
+    status: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

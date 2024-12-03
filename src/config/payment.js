@@ -25,27 +25,19 @@ const paymentTypesSeederData = [
   },
 ];
 
-const fastTransferStatus = {
+const passiveActiveStatuses = {
   PASSIVE: 0,
   ACTIVE: 1,
 };
-const bankAccountStatus = {
-  PASSIVE: 0,
-  ACTIVE: 1,
-};
+
 const depositStatus = {
-  PASSIVE: 0,
-  ACTIVE: 1,
-};
-const withdrawalStatus = {
-  PASSIVE: 0,
-  ACTIVE: 1,
+  PENDING: 0,
+  APPROVED: 1,
+  DECLINED: 2,
 };
 module.exports = {
   paymentMethodTypes,
   paymentTypesSeederData,
-  fastTransferStatus,
-  bankAccountStatus,
+  passiveActiveStatuses,
   depositStatus,
-  withdrawalStatus,
 };
