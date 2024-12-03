@@ -6,4 +6,5 @@ module.exports.Institution = require("./institution.model");
 module.exports.Personal = require("./personal.model");
 module.exports.PaymentMethod = require("./paymentMethod.model");
 module.exports.PaymentMethodType = require("./paymentMethodType.model");
+module.exports.Deposit = require("./deposit.model");
 module.exports.OTP = require("./otp");

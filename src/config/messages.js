@@ -28,4 +28,7 @@ module.exports = {
   paymentMethod: {
     notFound: "Payment Method Not Found",
   },
+  deposit: {
+    notFound: "Deposit Not Found",
+  },
 };
