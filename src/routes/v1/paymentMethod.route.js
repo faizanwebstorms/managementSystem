@@ -22,7 +22,7 @@ router.get(
 router.get(
   "/type/all/get",
   auth(),
-  role(["ADMIN", "DEALER"]),
+  role(["ADMIN", "DEALER", "PERSONAL"]),
   paymentController.getAllPaymentMethodType
 );
 
