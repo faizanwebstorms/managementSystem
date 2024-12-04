@@ -33,7 +33,10 @@ const passiveActiveStatuses = {
 const depositStatus = {
   PENDING: 0,
   APPROVED: 1,
-  DECLINED: 2,
+  REJECTED: 2,
+  AWAIT_DEPOSIT: 3,
+  MARK_AS_MANUAL: 4,
+  CONFIRM_DEPOSIT: 5,
 };
 module.exports = {
   paymentMethodTypes,
