@@ -321,6 +321,11 @@ module.exports = router;
  *           type: integer
  *         description: Enter 1 for Institution , 2 for Personal
  *       - in: query
+ *         name: type
+ *         schema:
+ *           type: integer
+ *         description: Enter Personal type to sort by different personals
+ *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string

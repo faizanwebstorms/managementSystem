@@ -139,6 +139,7 @@ const getAllAccounts = catchAsync(async (req, res) => {
         { name: { $regex: term, $options: "i" } },
         { "user.email": { $regex: term, $options: "i" } },
       ],
+      ...(req.query.type && { type: req.query.type }),
     };
   }
 

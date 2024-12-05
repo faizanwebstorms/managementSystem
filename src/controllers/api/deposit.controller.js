@@ -50,6 +50,8 @@ const getAllDeposit = catchAsync(async (req, res) => {
           ? [] // If the term is not a number, don't include numeric fields
           : [{ amount: termAsNumber }]),
       ],
+      ...(req.query.senderId && { senderId: req.query.senderId }),
+      ...(req.query.recieverId && { senderId: req.query.recieverId }),
     };
   }
   const deposits = await depositService.getAllDeposits(filter, options);

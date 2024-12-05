@@ -102,6 +102,16 @@ module.exports = router;
  *           type: string
  *         description: Seach by name , iban , amount etc
  *       - in: query
+ *         name: senderId
+ *         schema:
+ *           type: string
+ *         description: Enter senderId to search by personals
+ *       - in: query
+ *         name: recieverId
+ *         schema:
+ *           type: string
+ *         description: Enter recieverID to search by admin or dealers
+ *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
