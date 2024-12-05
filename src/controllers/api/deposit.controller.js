@@ -52,6 +52,7 @@ const getAllDeposit = catchAsync(async (req, res) => {
       ],
       ...(req.query.senderId && { senderId: req.query.senderId }),
       ...(req.query.recieverId && { senderId: req.query.recieverId }),
+      ...(req.query.typeId && { typeId: req.query.typeId }),
     };
   }
   const deposits = await depositService.getAllDeposits(filter, options);

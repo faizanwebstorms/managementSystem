@@ -270,6 +270,16 @@ module.exports = router;
  *           type: string
  *         description: Seach by name , detail , paymentMinLimit , currenct etc
  *       - in: query
+ *         name: typeId
+ *         schema:
+ *           type: string
+ *         description:  Enter type id to search by payment method
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         description:  Enter userId to search by user
+ *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string

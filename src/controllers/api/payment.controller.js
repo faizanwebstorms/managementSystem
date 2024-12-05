@@ -119,6 +119,8 @@ const getAllPaymentMethods = catchAsync(async (req, res) => {
               { totalLimit: termAsNumber },
             ]),
       ],
+      ...(req.query.typeId && { typeId: req.query.typeId }),
+      ...(req.query.userId && { userId: req.query.userId }),
     };
   }
   const paymentMethodType = await paymentService.getAllPaymentMethod(

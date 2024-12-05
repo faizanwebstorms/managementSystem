@@ -112,6 +112,11 @@ module.exports = router;
  *           type: string
  *         description: Enter recieverID to search by admin or dealers
  *       - in: query
+ *         name: typeId
+ *         schema:
+ *           type: string
+ *         description: Enter typeId to search by payment method
+ *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
