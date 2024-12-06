@@ -6,6 +6,7 @@ const { depositService } = require("../../services");
 const ApiError = require("../../utils/ApiError");
 const pick = require("../../utils/pick");
 const { Deposit } = require("../../models");
+const { ObjectId } = require("mongodb");
 
 /**
  * Store a Deposit
@@ -38,9 +39,11 @@ const getAllDeposit = catchAsync(async (req, res) => {
       req.query.sortBy.split(":")[1];
   }
   let filter = {
-    ...(req.query.senderId && { senderId: req.query.senderId }),
-    ...(req.query.recieverId && { senderId: req.query.recieverId }),
-    ...(req.query.typeId && { typeId: req.query.typeId }),
+    ...(req.query.senderId && { senderId: new ObjectId(req.query.senderId) }),
+    ...(req.query.recieverId && {
+      senderId: new ObjectId(req.query.recieverId),
+    }),
+    ...(req.query.typeId && { typeId: new ObjectId(req.query.typeId) }),
   };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
