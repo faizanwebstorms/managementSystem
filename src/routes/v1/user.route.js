@@ -17,7 +17,7 @@ router.post("/dealer/add", auth(), role(["ADMIN"]), userController.addDealer);
 router.get(
   "/dealers/all",
   auth(),
-  role(["ADMIN"]),
+  role(["ADMIN", "INSTITUTION", "PERSONAL"]),
   userController.getAllDealers
 );
 
