@@ -37,12 +37,17 @@ const getAllDeposit = catchAsync(async (req, res) => {
     options.sort[req.query.sortBy.split(":")[0]] =
       req.query.sortBy.split(":")[1];
   }
-  let filter = {};
+  let filter = {
+    ...(req.query.senderId && { senderId: req.query.senderId }),
+    ...(req.query.recieverId && { senderId: req.query.recieverId }),
+    ...(req.query.typeId && { typeId: req.query.typeId }),
+  };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
     // Try to parse the term as a number for the dealer fields
     const termAsNumber = parseFloat(term);
     filter = {
+      ...filter,
       $or: [
         { name: { $regex: term, $options: "i" } },
         { iban: { $regex: term, $options: "i" } },
@@ -50,9 +55,6 @@ const getAllDeposit = catchAsync(async (req, res) => {
           ? [] // If the term is not a number, don't include numeric fields
           : [{ amount: termAsNumber }]),
       ],
-      ...(req.query.senderId && { senderId: req.query.senderId }),
-      ...(req.query.recieverId && { senderId: req.query.recieverId }),
-      ...(req.query.typeId && { typeId: req.query.typeId }),
     };
   }
   const deposits = await depositService.getAllDeposits(filter, options);
