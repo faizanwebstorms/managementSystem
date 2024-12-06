@@ -132,7 +132,7 @@ const getAllAccounts = catchAsync(async (req, res) => {
       req.query.sortBy.split(":")[1];
   }
   let filter = {
-    ...(req.query.type && { type: req.query.type }),
+    ...(req.query.type && { type: Number(req.query.type) }),
   };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
@@ -168,7 +168,7 @@ const getAllPersonal = catchAsync(async (req, res) => {
       req.query.sortBy.split(":")[1];
   }
   let filter = {
-    ...(req.query.type && { type: req.query.type }),
+    ...(req.query.type && { type: Number(req.query.type) }),
   };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();

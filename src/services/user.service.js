@@ -358,6 +358,7 @@ const getAllAccounts = async (filter, options, model, user) => {
         delete filter.personalHolderId;
       }
     }
+    console.log("filter", filter);
     const pipeline = [
       {
         $lookup: {
