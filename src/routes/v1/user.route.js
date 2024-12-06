@@ -44,6 +44,7 @@ router.get("/account/:id", auth(), userController.getAAccount);
 router.delete("/account/:id", auth(), userController.deleteAAccount);
 router.patch("/account/:id", auth(), userController.updateAAccount);
 
+router.get("/personals/all", auth(), userController.getAllPersonal);
 module.exports = router;
 
 /**
@@ -320,6 +321,55 @@ module.exports = router;
  *         schema:
  *           type: integer
  *         description: Enter 1 for Institution , 2 for Personal
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: integer
+ *         description: Enter Personal type to sort by different personals
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: sort by query in the form of field:desc/asc (ex. name:asc)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 10
+ *         description: Maximum number of records
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+/**
+ * @swagger
+ * /users/personals/all:
+ *   get:
+ *     summary: Get all personals
+ *     description: Get all personals
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: searchTerm
+ *         schema:
+ *           type: string
+ *         description: Seach by email , name etc
  *       - in: query
  *         name: type
  *         schema:

@@ -11,6 +11,7 @@ const {
   deletePaymentMethod,
 } = require("../../services/payment.service");
 const ApiError = require("../../utils/ApiError");
+const { ObjectId } = require("mongodb");
 
 /**
  * Add a payment method type
@@ -99,7 +100,10 @@ const getAllPaymentMethods = catchAsync(async (req, res) => {
     options.sort[req.query.sortBy.split(":")[0]] =
       req.query.sortBy.split(":")[1];
   }
-  let filter = {};
+  let filter = {
+    ...(req.query.typeId && { typeId: new ObjectId(req.query.typeId) }),
+    ...(req.query.userId && { userId: new ObjectId(req.query.userId) }),
+  };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
 
@@ -107,6 +111,7 @@ const getAllPaymentMethods = catchAsync(async (req, res) => {
     const termAsNumber = parseFloat(term);
 
     filter = {
+      ...filter,
       $or: [
         { name: { $regex: term, $options: "i" } },
         { detail: { $regex: term, $options: "i" } },
@@ -119,8 +124,6 @@ const getAllPaymentMethods = catchAsync(async (req, res) => {
               { totalLimit: termAsNumber },
             ]),
       ],
-      ...(req.query.typeId && { typeId: req.query.typeId }),
-      ...(req.query.userId && { userId: req.query.userId }),
     };
   }
   const paymentMethodType = await paymentService.getAllPaymentMethod(

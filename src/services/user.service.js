@@ -390,6 +390,36 @@ const getAllAccounts = async (filter, options, model, user) => {
 };
 
 /**
+ * Get all Personal Accounts with user information using aggregate and aggregatePaginate
+ * @returns {Promise<Object>}
+ */
+const getAllPersonals = async (filter, options) => {
+  try {
+    const pipeline = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" }, // Unwind to flatten the user data if only one user per dealer
+      { $match: filter },
+    ];
+
+    const personals = await Personal.aggregatePaginate(
+      Personal.aggregate(pipeline),
+      options
+    );
+
+    return personals;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
  * Get a Personal or Institution
  * @returns {Promise<User>}
  */
@@ -480,4 +510,5 @@ module.exports = {
   getAAccount,
   updateAAccount,
   updateADealer,
+  getAllPersonals,
 };

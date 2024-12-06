@@ -131,15 +131,18 @@ const getAllAccounts = catchAsync(async (req, res) => {
     options.sort[req.query.sortBy.split(":")[0]] =
       req.query.sortBy.split(":")[1];
   }
-  let filter = {};
+  let filter = {
+    ...(req.query.type && { type: req.query.type }),
+  };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
     filter = {
+      ...filter,
+
       $or: [
         { name: { $regex: term, $options: "i" } },
         { "user.email": { $regex: term, $options: "i" } },
       ],
-      ...(req.query.type && { type: req.query.type }),
     };
   }
 
@@ -150,6 +153,37 @@ const getAllAccounts = catchAsync(async (req, res) => {
     req.user
   );
   res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, account));
+});
+
+/**
+ * Get all Personals
+ * @type {(function(*, *, *): void)|*}
+ */
+const getAllPersonal = catchAsync(async (req, res) => {
+  const options = pick(req.query, ["limit", "page"]);
+  if (req.query.sortBy) {
+    options.sort = {};
+    // eslint-disable-next-line prefer-destructuring
+    options.sort[req.query.sortBy.split(":")[0]] =
+      req.query.sortBy.split(":")[1];
+  }
+  let filter = {
+    ...(req.query.type && { type: req.query.type }),
+  };
+  if (req.query.searchTerm) {
+    const term = req.query.searchTerm.trim();
+    filter = {
+      ...filter,
+
+      $or: [
+        { name: { $regex: term, $options: "i" } },
+        { "user.email": { $regex: term, $options: "i" } },
+      ],
+    };
+  }
+
+  const personal = await userService.getAllPersonals(filter, options);
+  res.send(Helper.apiResponse(httpStatus.OK, messages.api.success, personal));
 });
 
 /**
@@ -221,4 +255,5 @@ module.exports = {
   deleteAAccount,
   updateAAccount,
   updateADealer,
+  getAllPersonal,
 };
