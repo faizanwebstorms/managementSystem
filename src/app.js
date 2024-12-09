@@ -15,6 +15,8 @@ const { errorConverter, errorHandler } = require("./middlewares/error");
 const ApiError = require("./utils/ApiError");
 const logger = require("./config/logger");
 const seedPaymentTypes = require("./seeders/paymentType.seeder");
+const { socketConnection } = require("./utils/socket");
+const socketMiddleware = require("./middlewares/socket");
 
 mongoose.set("strictQuery", true);
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
@@ -27,6 +29,9 @@ const app = express();
 const server = app.listen(config.port, () => {
   logger.info(`Listening to port ${config.port}`);
 });
+const io = socketConnection(server);
+
+app.use(socketMiddleware(io));
 
 if (config.env !== "test") {
   app.use(morgan.successHandler);
