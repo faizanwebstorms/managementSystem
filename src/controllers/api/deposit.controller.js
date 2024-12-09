@@ -40,6 +40,7 @@ const getAllDeposit = catchAsync(async (req, res) => {
   }
   let filter = {
     ...(req.query.senderId && { senderId: new ObjectId(req.query.senderId) }),
+    ...(req.query.status && { status: Number(req.query.status) }),
     ...(req.query.recieverId && {
       senderId: new ObjectId(req.query.recieverId),
     }),
@@ -58,6 +59,14 @@ const getAllDeposit = catchAsync(async (req, res) => {
           ? [] // If the term is not a number, don't include numeric fields
           : [{ amount: termAsNumber }]),
       ],
+    };
+  }
+
+  // Add date range filter for createdAt
+  if (req.query.minDate && req.query.maxDate) {
+    filter.createdAt = {
+      $gte: new Date(req.query.minDate),
+      $lte: new Date(req.query.maxDate),
     };
   }
   const deposits = await depositService.getAllDeposits(filter, options);

@@ -117,6 +117,21 @@ module.exports = router;
  *           type: string
  *         description: Enter typeId to search by payment method
  *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *         description: Enter status to filter by status
+ *       - in: query
+ *         name: minDate
+ *         schema:
+ *           type: string
+ *         description: Enter minDate to filter by minDate
+ *       - in: query
+ *         name: maxDate
+ *         schema:
+ *           type: string
+ *         description: Enter maxDate to filter by maxDate
+ *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
