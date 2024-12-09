@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 const { toJSON, paginate } = require("./plugins");
 const userConfig = require("../config/user");
+const { depositStatus } = require("../config/payment");
 
 const dealerSchema = mongoose.Schema(
   {
@@ -9,16 +10,28 @@ const dealerSchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
     },
+    name: {
+      type: String,
+    },
     payment_range_min: {
       type: Number,
     },
     payment_range_max: {
       type: Number,
     },
+    paymentMethodType: {
+      type: Number,
+    },
     classification: {
       type: Number,
       enum: userConfig.getDealerClassifications,
       default: userConfig.dealerClassifications.NETSELLER,
+    },
+    depositStatus: {
+      type: Number,
+    },
+    withdrawalStatus: {
+      type: Number,
     },
   },
 

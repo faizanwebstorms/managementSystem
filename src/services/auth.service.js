@@ -1,9 +1,17 @@
 const userService = require("./user.service");
-const { Token, OTP, User } = require("../models");
+const {
+  Token,
+  OTP,
+  User,
+  Dealer,
+  Institution,
+  Personal,
+} = require("../models");
 const { tokenTypes } = require("../config/tokens");
 const { otpTypes } = require("../config/otp");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
+const { roles } = require("../config/user");
 
 /**
  * Login with username and password
@@ -13,7 +21,7 @@ const ApiError = require("../utils/ApiError");
  */
 const login = async (email, password) => {
   try {
-    const user = await userService.findByClause({
+    let user = await userService.findByClause({
       $or: [{ email }, { username: email }],
     });
     if (!user || !(await user.isPasswordMatch(password))) {
@@ -22,6 +30,16 @@ const login = async (email, password) => {
         "Incorrect email/username or password"
       );
     }
+
+    let userDetail;
+    if (user.role === roles.DEALER) {
+      userDetail = await Dealer.findOne({ userId: user?._id });
+    } else if (user.role === roles.INSTITUTION) {
+      userDetail = await Institution.findOne({ userId: user?._id });
+    } else if (user.role === roles.PERSONAL) {
+      userDetail = await Personal.findOne({ userId: user?._id });
+    }
+    user = { ...user._doc, userDetail };
 
     return user;
   } catch (e) {

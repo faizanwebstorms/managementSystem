@@ -25,4 +25,10 @@ module.exports = {
   dealer: {
     notFound: "Dealer Not Found",
   },
+  paymentMethod: {
+    notFound: "Payment Method Not Found",
+  },
+  deposit: {
+    notFound: "Deposit Not Found",
+  },
 };

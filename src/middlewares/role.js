@@ -16,14 +16,19 @@ const checkRole = (requiredRole) => async (req, res, next) => {
 
     let userRole = user?.role;
     userRole = rolesReverseForVerifyingRoles[userRole];
-
     // Check if the user's roles is equal the required role
-    if (userRole !== requiredRole) {
+    if (!requiredRole.includes(userRole)) {
       throw new ApiError(
         httpStatus.FORBIDDEN,
         "You are not authorized for this action"
       );
     }
+    // if (userRole !== requiredRole) {
+    //   throw new ApiError(
+    //     httpStatus.FORBIDDEN,
+    //     "You are not authorized for this action"
+    //   );
+    // }
 
     // Proceed to the next middleware or route handler
     next();
