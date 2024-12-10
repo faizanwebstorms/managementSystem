@@ -21,17 +21,16 @@ const socketConnection = (server) => {
       if (!deposit) {
         return socket.emit("error", { error: api.internalServerError });
       }
+      console.log("data?.logedInUserId", data?.logedInUserId);
       const senderUser = await User.findOne({ _id: data?.logedInUserId });
       console.log("senderUser", senderUser);
       // const allDeposits = await depositService.getAllDeposits({});
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
-      io.to([
-        deposit?.recieverId,
-        deposit?.senderId,
-        senderUser?.id,
-        senderUser?._id,
-      ]).emit("newDeposit", deposit);
+      io.to(deposit?.receiverId).emit("newDeposit", deposit); // Receiver
+      io.to(deposit?.senderId).emit("newDeposit", deposit); // Sender
+      io.to(senderUser?.id).emit("newDeposit", deposit); // Logged-in user
+      io.to(senderUser?._id).emit("newDeposit", deposit);
     });
 
     // Handle disconnection
