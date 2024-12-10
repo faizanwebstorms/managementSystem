@@ -11,6 +11,8 @@ const socketConnection = (server) => {
     addTrailingSlash: false,
   });
   io.on("connection", async (socket) => {
+    console.log("A client connected:", socket.id);
+
     // create deposit
     socket.on("new-deposit", async (data) => {
       const deposit = await depositService.addDeposit(data);
@@ -25,6 +27,11 @@ const socketConnection = (server) => {
         "allDeposits",
         allDeposits
       );
+    });
+
+    // Handle disconnection
+    socket.on("disconnect", () => {
+      console.log("A client disconnected:", socket.id);
     });
   });
   return io;
