@@ -23,7 +23,10 @@ const socketConnection = (server) => {
       // const allDeposits = await depositService.getAllDeposits({});
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
-      socket.emit("newDeposit", deposit);
+      io.to([deposit?.recieverId, deposit?.senderId]).emit(
+        "newDeposit",
+        deposit
+      );
     });
 
     // Handle disconnection
