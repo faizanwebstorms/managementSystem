@@ -2,7 +2,7 @@
 const socketIO = require("socket.io");
 const { api } = require("../config/messages");
 const { depositService } = require("../services");
-const { User } = require("../models");
+const { User, Personal } = require("../models");
 
 const socketConnection = (server) => {
   const io = socketIO(server, {
@@ -16,14 +16,15 @@ const socketConnection = (server) => {
 
     // create deposit
     socket.on("new-deposit", async (data) => {
-      const deposit = await depositService.addDeposit(data);
+      let deposit = await depositService.addDeposit(data);
       console.log("deposit", deposit);
       if (!deposit) {
         return socket.emit("error", { error: api.internalServerError });
       }
       console.log("data?.logedInUserId", data?.logedInUserId);
-      const senderUser = await User.findOne({ _id: data?.logedInUserId });
-      console.log("senderUser", senderUser);
+      const personal = await Personal.findOne({ _id: data?.senderId });
+      console.log("personal", personal);
+      if (personal) deposit.personal = personal;
       // const allDeposits = await depositService.getAllDeposits({});
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
