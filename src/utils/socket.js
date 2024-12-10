@@ -22,6 +22,7 @@ const socketConnection = (server) => {
         return socket.emit("error", { error: api.internalServerError });
       }
       const senderUser = await User.findOne({ _id: data?.logedInUserId });
+      console.log("senderUser", senderUser);
       // const allDeposits = await depositService.getAllDeposits({});
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
