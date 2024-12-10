@@ -2,6 +2,7 @@
 const socketIO = require("socket.io");
 const { api } = require("../config/messages");
 const { depositService } = require("../services");
+const { User } = require("../models");
 
 const socketConnection = (server) => {
   const io = socketIO(server, {
@@ -20,13 +21,16 @@ const socketConnection = (server) => {
       if (!deposit) {
         return socket.emit("error", { error: api.internalServerError });
       }
+      const senderUser = await User.findOne({ _id: data?.logedInUserId });
       // const allDeposits = await depositService.getAllDeposits({});
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
-      io.to([deposit?.recieverId, deposit?.senderId]).emit(
-        "newDeposit",
-        deposit
-      );
+      io.to([
+        deposit?.recieverId,
+        deposit?.senderId,
+        senderUser?.id,
+        senderUser?._id,
+      ]).emit("newDeposit", deposit);
     });
 
     // Handle disconnection
