@@ -20,10 +20,10 @@ const socketConnection = (server) => {
       if (!deposit) {
         return socket.emit("error", { error: api.internalServerError });
       }
-      const allDeposits = await depositService.getAllDeposits({});
+      // const allDeposits = await depositService.getAllDeposits({});
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
-      socket.emit("allDeposits", allDeposits);
+      socket.emit("newDeposit", deposit);
     });
 
     // Handle disconnection

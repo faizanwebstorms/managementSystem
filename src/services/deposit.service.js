@@ -58,6 +58,7 @@ const getADeposit = async (id) => {
 const getAllDeposits = async (filter, options) => {
   try {
     // Build the aggregation pipeline
+    console.log("aaaa");
     const pipeline = [{ $match: filter }];
     // Apply pagination options
     const deposits = await Deposit.aggregatePaginate(
