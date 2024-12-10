@@ -28,9 +28,9 @@ const socketConnection = (server) => {
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
       // socket.emit("newDeposit", deposit); // Receiver
-      socket.to(deposit?.senderId).emit("newDeposit", deposit); // Sender
-      socket.to(senderUser?.id).emit("newDeposit", deposit); // Logged-in user
-      socket.to(senderUser?._id).emit("newDeposit", deposit);
+      io.to("672e05607f762523835d1f01").emit("newDeposit", deposit); // Sender
+      io.to(senderUser?.id).emit("newDeposit", deposit); // Logged-in user
+      io.to(senderUser?._id.toString()).emit("newDeposit", deposit);
     });
 
     // Handle disconnection
