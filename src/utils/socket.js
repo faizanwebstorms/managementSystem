@@ -16,19 +16,29 @@ const socketConnection = (server) => {
 
     // create deposit
     socket.on("new-deposit", async (data) => {
-      let deposit = await depositService.addDeposit(data);
-      if (!deposit) {
-        return socket.emit("error", { error: api.internalServerError });
+      try {
+        let deposit = await depositService.addDeposit(data);
+        if (!deposit) {
+          return socket.emit("deposit-error", {
+            message: api.internalServerError,
+          });
+        }
+        const personal = await Personal.findOne({ _id: data?.senderId });
+        if (personal) deposit.personal = personal;
+
+        // Emit success to the client who initiated the event
+        socket.emit("deposit-success", deposit);
+
+        // const allDeposits = await depositService.getAllDeposits({});
+        /// sending deposits to concerned persons
+        // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
+        io.sockets.emit("newDeposit", deposit); // Receiver
+        // io.to("672e05607f762523835d1f01").emit("newDeposit", deposit); // Sender
+        // io.to(senderUser?.id).emit("newDeposit", deposit); // Logged-in user
+        // io.to(senderUser?._id.toString()).emit("newDeposit", deposit);
+      } catch (error) {
+        socket.emit("deposit-error", { message: error.message });
       }
-      const personal = await Personal.findOne({ _id: data?.senderId });
-      if (personal) deposit.personal = personal;
-      // const allDeposits = await depositService.getAllDeposits({});
-      /// sending deposits to concerned persons
-      // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
-      io.sockets.emit("newDeposit", deposit); // Receiver
-      // io.to("672e05607f762523835d1f01").emit("newDeposit", deposit); // Sender
-      // io.to(senderUser?.id).emit("newDeposit", deposit); // Logged-in user
-      // io.to(senderUser?._id.toString()).emit("newDeposit", deposit);
     });
 
     // Handle disconnection
