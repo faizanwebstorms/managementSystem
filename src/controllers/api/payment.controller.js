@@ -45,12 +45,18 @@ const getAPaymentMethodType = catchAsync(async (req, res) => {
 const getAllPaymentMethodType = catchAsync(async (req, res) => {
   const options = pick(req.query, ["limit", "page"]);
 
-  if (req.query.sortBy) {
-    options.sort = {};
-    // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(":")[0]] =
-      req.query.sortBy.split(":")[1];
-  }
+  // if (req.query.sortBy) {
+  //   options.sort = {};
+  //   // eslint-disable-next-line prefer-destructuring
+  //   options.sort[req.query.sortBy.split(":")[0]] =
+  //     req.query.sortBy.split(":")[1];
+  // }
+  options.sort = {};
+
+  req.query.sortBy
+    ? (options.sort[req.query.sortBy.split(":")[0]] =
+        req.query.sortBy.split(":")[1])
+    : (options.sort["createdAt"] = "desc");
   console.log("req.query.isParent", req.query.isParent);
   let filter = {
     ...(req.query.isParent && {
@@ -94,12 +100,18 @@ const addPaymentMethod = catchAsync(async (req, res) => {
  */
 const getAllPaymentMethods = catchAsync(async (req, res) => {
   const options = pick(req.query, ["limit", "page"]);
-  if (req.query.sortBy) {
-    options.sort = {};
-    // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(":")[0]] =
-      req.query.sortBy.split(":")[1];
-  }
+  // if (req.query.sortBy) {
+  //   options.sort = {};
+  //   // eslint-disable-next-line prefer-destructuring
+  //   options.sort[req.query.sortBy.split(":")[0]] =
+  //     req.query.sortBy.split(":")[1];
+  // }
+  options.sort = {};
+
+  req.query.sortBy
+    ? (options.sort[req.query.sortBy.split(":")[0]] =
+        req.query.sortBy.split(":")[1])
+    : (options.sort["createdAt"] = "desc");
   let filter = {
     ...(req.query.typeId && { typeId: new ObjectId(req.query.typeId) }),
     ...(req.query.userId && { userId: new ObjectId(req.query.userId) }),

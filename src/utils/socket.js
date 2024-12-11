@@ -17,18 +17,15 @@ const socketConnection = (server) => {
     // create deposit
     socket.on("new-deposit", async (data) => {
       let deposit = await depositService.addDeposit(data);
-      console.log("deposit", deposit);
       if (!deposit) {
         return socket.emit("error", { error: api.internalServerError });
       }
-      console.log("data?.logedInUserId", data?.logedInUserId);
       const personal = await Personal.findOne({ _id: data?.senderId });
-      console.log("personal", personal);
       if (personal) deposit.personal = personal;
       // const allDeposits = await depositService.getAllDeposits({});
       /// sending deposits to concerned persons
       // io.to(deposit?.recieverId).emit("allDeposits", allDeposits);
-      socket.emit("newDeposit", deposit); // Receiver
+      io.sockets.emit("newDeposit", deposit); // Receiver
       // io.to("672e05607f762523835d1f01").emit("newDeposit", deposit); // Sender
       // io.to(senderUser?.id).emit("newDeposit", deposit); // Logged-in user
       // io.to(senderUser?._id.toString()).emit("newDeposit", deposit);

@@ -39,12 +39,18 @@ const addDealer = catchAsync(async (req, res) => {
  */
 const getAllDealers = catchAsync(async (req, res) => {
   const options = pick(req.query, ["limit", "page"]);
-  if (req.query.sortBy) {
-    options.sort = {};
-    // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(":")[0]] =
-      req.query.sortBy.split(":")[1];
-  }
+  // if (req.query.sortBy) {
+  //   options.sort = {};
+  //   // eslint-disable-next-line prefer-destructuring
+  //   options.sort[req.query.sortBy.split(":")[0]] =
+  //     req.query.sortBy.split(":")[1];
+  // }
+  options.sort = {};
+
+  req.query.sortBy
+    ? (options.sort[req.query.sortBy.split(":")[0]] =
+        req.query.sortBy.split(":")[1])
+    : (options.sort["createdAt"] = "desc");
   let filter = {};
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();
@@ -125,12 +131,18 @@ const addAccount = catchAsync(async (req, res) => {
  */
 const getAllAccounts = catchAsync(async (req, res) => {
   const options = pick(req.query, ["limit", "page"]);
-  if (req.query.sortBy) {
-    options.sort = {};
-    // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(":")[0]] =
-      req.query.sortBy.split(":")[1];
-  }
+  // if (req.query.sortBy) {
+  //   options.sort = {};
+  //   // eslint-disable-next-line prefer-destructuring
+  //   options.sort[req.query.sortBy.split(":")[0]] =
+  //     req.query.sortBy.split(":")[1];
+  // }
+  options.sort = {};
+
+  req.query.sortBy
+    ? (options.sort[req.query.sortBy.split(":")[0]] =
+        req.query.sortBy.split(":")[1])
+    : (options.sort["createdAt"] = "desc");
   let filter = {
     ...(req.query.type && { type: Number(req.query.type) }),
   };
@@ -161,12 +173,18 @@ const getAllAccounts = catchAsync(async (req, res) => {
  */
 const getAllPersonal = catchAsync(async (req, res) => {
   const options = pick(req.query, ["limit", "page"]);
-  if (req.query.sortBy) {
-    options.sort = {};
-    // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(":")[0]] =
-      req.query.sortBy.split(":")[1];
-  }
+  // if (req.query.sortBy) {
+  //   options.sort = {};
+  //   // eslint-disable-next-line prefer-destructuring
+  //   options.sort[req.query.sortBy.split(":")[0]] =
+  //     req.query.sortBy.split(":")[1];
+  // }
+  options.sort = {};
+
+  req.query.sortBy
+    ? (options.sort[req.query.sortBy.split(":")[0]] =
+        req.query.sortBy.split(":")[1])
+    : (options.sort["createdAt"] = "desc");
   let filter = {
     ...(req.query.type && { type: Number(req.query.type) }),
   };

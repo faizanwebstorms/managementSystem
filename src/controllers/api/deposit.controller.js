@@ -32,12 +32,18 @@ const getADeposit = catchAsync(async (req, res) => {
 const getAllDeposit = catchAsync(async (req, res) => {
   const options = pick(req.query, ["limit", "page"]);
 
-  if (req.query.sortBy) {
-    options.sort = {};
-    // eslint-disable-next-line prefer-destructuring
-    options.sort[req.query.sortBy.split(":")[0]] =
-      req.query.sortBy.split(":")[1];
-  }
+  // if (req.query.sortBy) {
+  //   options.sort = {};
+  //   // eslint-disable-next-line prefer-destructuring
+  //   options.sort[req.query.sortBy.split(":")[0]] =
+  //     req.query.sortBy.split(":")[1];
+  // }
+  options.sort = {};
+
+  req.query.sortBy
+    ? (options.sort[req.query.sortBy.split(":")[0]] =
+        req.query.sortBy.split(":")[1])
+    : (options.sort["createdAt"] = "desc");
   let filter = {
     ...(req.query.senderId && { senderId: new ObjectId(req.query.senderId) }),
     ...(req.query.status && { status: Number(req.query.status) }),
