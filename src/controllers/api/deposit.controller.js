@@ -7,6 +7,7 @@ const ApiError = require("../../utils/ApiError");
 const pick = require("../../utils/pick");
 const { Deposit } = require("../../models");
 const { ObjectId } = require("mongodb");
+const { transactionTypeStatus } = require("../../config/payment");
 
 /**
  * Store a Deposit
@@ -44,6 +45,7 @@ const getAllDeposit = catchAsync(async (req, res) => {
     ? (options.sort[req.query.sortBy.split(":")[0]] =
         req.query.sortBy.split(":")[1])
     : (options.sort["createdAt"] = "desc");
+
   let filter = {
     ...(req.query.senderId && { senderId: new ObjectId(req.query.senderId) }),
     ...(req.query.status && { status: Number(req.query.status) }),
@@ -51,6 +53,9 @@ const getAllDeposit = catchAsync(async (req, res) => {
       senderId: new ObjectId(req.query.recieverId),
     }),
     ...(req.query.typeId && { typeId: new ObjectId(req.query.typeId) }),
+    transactionType: req.query.transactionType
+      ? req.query.transactionType
+      : transactionTypeStatus.DEPOSIT,
   };
   if (req.query.searchTerm) {
     const term = req.query.searchTerm.trim();

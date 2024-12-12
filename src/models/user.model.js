@@ -70,6 +70,9 @@ const userSchema = mongoose.Schema(
       enum: userConfig.getTypes,
       default: userConfig.types.STANDARD,
     },
+    isSocketOn: {
+      type: Boolean,
+    },
   },
 
   {

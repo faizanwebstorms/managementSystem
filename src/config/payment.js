@@ -38,9 +38,14 @@ const depositStatus = {
   MARK_AS_MANUAL: 4,
   CONFIRM_DEPOSIT: 5,
 };
+const transactionTypeStatus = {
+  DEPOSIT: 0,
+  WITHDRAWAL: 1,
+};
 module.exports = {
   paymentMethodTypes,
   paymentTypesSeederData,
   passiveActiveStatuses,
   depositStatus,
+  transactionTypeStatus,
 };

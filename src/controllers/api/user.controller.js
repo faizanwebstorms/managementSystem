@@ -14,7 +14,7 @@ const { log } = require("winston");
  * @type {(function(*, *, *): void)|*}
  */
 const updateUser = catchAsync(async (req, res) => {
-  let user = await User.findById(req.params?.userId);
+  let user = await User.findById(req.params?.id);
   if (!user) {
     throw new ApiError(httpStatus.BAD_REQUEST, messages.api.userNotFound);
   }

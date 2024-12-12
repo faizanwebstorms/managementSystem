@@ -8,7 +8,7 @@ const depositSchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Personal",
     },
-    recieverId: {
+    serviceProviderId: {
       type: mongoose.SchemaTypes.ObjectId,
     },
     typeId: {
@@ -25,6 +25,9 @@ const depositSchema = mongoose.Schema(
       type: Number,
     },
     status: {
+      type: Number,
+    },
+    transactionType: {
       type: Number,
     },
   },

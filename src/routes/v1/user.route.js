@@ -11,6 +11,7 @@ const router = express.Router();
 // router
 //   .route("/dealer/add")
 //   .post(auth(), role(["ADMIN"]), userController.addDealer);
+router.patch("/:id", auth(), userController.updateUser);
 
 router.post("/dealer/add", auth(), role(["ADMIN"]), userController.addDealer);
 
@@ -52,6 +53,48 @@ module.exports = router;
  * tags:
  *   name: Users
  *   description: Users Management
+ */
+/**
+ * @swagger
+ * /users/{id}:
+ *   patch:
+ *     summary: Update User
+ *     description: Logged in users can only update their own information. Only admins can update other users.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Enter dealer id to get dealer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               isSocketOn:
+ *                 type: boolean
+ *             example:
+ *               firstName: update name
+ *               isSocketOn: true
+ *     responses:
+ *       "200":
+ *         $ref: '#/components/responses/UserResponse'
+ *       "400":
+ *         $ref: '#/components/responses/DuplicateEmail'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */
 /**
  * @swagger

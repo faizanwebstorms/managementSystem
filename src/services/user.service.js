@@ -20,6 +20,7 @@ const _filterUserData = (data) => {
     password: data?.password,
     username: data?.username,
     role: data?.role,
+    isSocketOn: true,
   };
 };
 
