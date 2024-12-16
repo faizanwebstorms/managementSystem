@@ -54,7 +54,7 @@ const getAllDeposit = catchAsync(async (req, res) => {
     }),
     ...(req.query.typeId && { typeId: new ObjectId(req.query.typeId) }),
     transactionType: req.query.transactionType
-      ? req.query.transactionType
+      ? Number(req.query.transactionType)
       : transactionTypeStatus.DEPOSIT,
   };
   if (req.query.searchTerm) {
