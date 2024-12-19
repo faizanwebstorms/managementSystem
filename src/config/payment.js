@@ -37,6 +37,7 @@ const depositStatus = {
   AWAIT_DEPOSIT: 3,
   MARK_AS_MANUAL: 4,
   CONFIRM_DEPOSIT: 5,
+  PROCESSING: 6,
 };
 const transactionTypeStatus = {
   DEPOSIT: 0,

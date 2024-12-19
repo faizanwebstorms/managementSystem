@@ -60,29 +60,24 @@ const getADeposit = async (id) => {
  */
 const getAllDeposits = async (filter, options) => {
   try {
-    // Build the aggregation pipeline
     const pipeline = [
-      // Match deposits based on the filter
       { $match: filter },
 
       // Lookup for Personal based on senderId
       {
         $lookup: {
-          from: "personals", // Collection name for Personal
+          from: "personals",
           localField: "senderId",
           foreignField: "_id",
           as: "personal",
         },
       },
-      // Unwind the personal array to a single object
       {
         $unwind: {
           path: "$personal",
           preserveNullAndEmptyArrays: true, // Keep deposits even if no matching personal is found
         },
       },
-
-      // Lookup for Dealer based on serviceProviderId
       {
         $lookup: {
           from: "dealers", // Collection name for Dealer
@@ -98,7 +93,21 @@ const getAllDeposits = async (filter, options) => {
           preserveNullAndEmptyArrays: true,
         },
       },
-
+      // Lookup for Institution based on personalHolderId in personal
+      {
+        $lookup: {
+          from: "institutions",
+          localField: "personal.personalHolderId", // Field in personal
+          foreignField: "_id",
+          as: "institution",
+        },
+      },
+      {
+        $unwind: {
+          path: "$institution",
+          preserveNullAndEmptyArrays: true, // Keep deposits even if no matching institution is found
+        },
+      },
       // Lookup for PaymentMethodType based on typeId
       {
         $lookup: {

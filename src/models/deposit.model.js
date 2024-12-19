@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
+const autoIncrement = require("mongoose-auto-increment");
+autoIncrement.initialize(mongoose.connection);
+
 const { toJSON, paginate } = require("./plugins");
 
 const depositSchema = mongoose.Schema(
@@ -14,6 +17,10 @@ const depositSchema = mongoose.Schema(
     typeId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "PaymentMethodType",
+    },
+    transactionId: {
+      type: Number, // Field for auto-increment
+      unique: true,
     },
     name: {
       type: String,
@@ -30,6 +37,9 @@ const depositSchema = mongoose.Schema(
     transactionType: {
       type: Number,
     },
+    processedBy: {
+      type: mongoose.SchemaTypes.ObjectId,
+    },
   },
   {
     timestamps: true,
@@ -40,6 +50,14 @@ const depositSchema = mongoose.Schema(
 depositSchema.plugin(toJSON);
 depositSchema.plugin(paginate);
 depositSchema.plugin(aggregatePaginate);
+// Add the AutoIncrement plugin for transactionId
+// Configure auto-increment for transactionId
+depositSchema.plugin(autoIncrement.plugin, {
+  model: "Deposit", // Name of the model
+  field: "transactionId", // Field to auto-increment
+  startAt: 1000, // Starting value
+  incrementBy: 1, // Increment value
+});
 
 // Set Object and Json property to true. Default is set to false
 depositSchema.set("toObject", { virtuals: true, versionKey: false });

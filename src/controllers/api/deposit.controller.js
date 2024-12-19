@@ -32,7 +32,6 @@ const getADeposit = catchAsync(async (req, res) => {
  */
 const getAllDeposit = catchAsync(async (req, res) => {
   const options = pick(req.query, ["limit", "page"]);
-
   // if (req.query.sortBy) {
   //   options.sort = {};
   //   // eslint-disable-next-line prefer-destructuring

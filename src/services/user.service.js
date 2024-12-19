@@ -54,7 +54,7 @@ const _filterAccountData = (data, userId, loggedInUser) => {
     userId,
     name: data?.name,
     type: loggedInUser?.role,
-    personalHolderId: loggedInUser?._id,
+    personalHolderId: loggedInUser?.userDetail?._id,
   };
 };
 
